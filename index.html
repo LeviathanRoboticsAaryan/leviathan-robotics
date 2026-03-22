@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leviathan Robotics | FTC Team 25667</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #000000;
+            --bg-elevated: #0a0a0a;
+            --bg-card: #111111;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --border: rgba(255,255,255,0.08);
+            --radius: 20px;
+            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* === NAV === */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 52px;
+        }
+        .nav-brand {
+            font-size: 1.1rem; font-weight: 600; letter-spacing: -0.02em;
+            color: var(--text-primary);
+            display: flex; align-items: center; gap: 0.6rem;
+            cursor: pointer;
+        }
+        .nav-brand img {
+            height: 32px; width: auto;
+            transition: transform 0.3s ease;
+        }
+        .nav-brand:hover img {
+            transform: scale(1.1);
+        }
+        .nav-brand span { color: var(--accent); }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.85rem; font-weight: 400; letter-spacing: 0.01em;
+            transition: color 0.3s;
+            position: relative; cursor: pointer;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1.5px; background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--text-primary); }
+        .nav-links a.active::after { width: 100%; }
+
+        .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+        .hamburger span {
+            display: block; width: 20px; height: 1.5px; background: var(--text-primary);
+            margin: 5px 0; transition: var(--transition);
+        }
+
+        /* === PAGES === */
+        .page {
+            display: none; min-height: 100vh; padding-top: 52px;
+            animation: pageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .page.active { display: block; }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: calc(100vh - 52px); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 4rem 2rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none; animation: pulseGlow 6s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateX(-50%) scale(1.1); }
+        }
+        .hero-logo {
+            width: 120px; height: auto; margin-bottom: 1.5rem;
+        }
+        .hero-badge {
+            display: inline-block; padding: 0.35rem 1rem;
+            border: 1px solid var(--border); border-radius: 100px;
+            font-size: 0.8rem; color: var(--accent); letter-spacing: 0.05em;
+            text-transform: uppercase; margin-bottom: 1.5rem;
+            background: rgba(56, 189, 248, 0.06);
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 700;
+            letter-spacing: -0.04em; line-height: 1.05;
+            background: linear-gradient(135deg, #fff 0%, #38bdf8 50%, #818cf8 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem); color: var(--text-secondary);
+            max-width: 600px; line-height: 1.6; margin-bottom: 3rem;
+        }
+        .hero-robot {
+            position: relative; width: min(600px, 90vw); margin-top: 1rem;
+        }
+        .hero-robot img {
+            width: 100%; height: auto; border-radius: var(--radius);
+        }
+        @keyframes floatBot {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* === SCROLL ANIMATIONS === */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* === SECTIONS === */
+        section { padding: 6rem 2rem; position: relative; }
+        .section-inner { max-width: 1100px; margin: 0 auto; }
+
+        .section-label {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+            color: var(--accent); margin-bottom: 0.75rem; font-weight: 500;
+        }
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
+            letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;
+            line-height: 1.6; margin-bottom: 3rem;
+        }
+
+        /* === STATS BAR === */
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem; margin: 3rem 0;
+        }
+        .stat {
+            text-align: center; padding: 2rem 1rem;
+            background: var(--bg-card); border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+        .stat:hover { transform: translateY(-4px); border-color: rgba(56,189,248,0.3); }
+        .stat-number {
+            font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--accent), #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; }
+
+        /* === CARDS === */
+        .card-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--bg-card); border-radius: var(--radius);
+            border: 1px solid var(--border); overflow: hidden;
+            transition: transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(56,189,248,0.25);
+            box-shadow: 0 20px 60px rgba(56,189,248,0.08);
+        }
+        .card-img {
+            width: 100%; height: 220px; object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .card:hover .card-img { transform: scale(1.04); }
+        .card-img-wrapper { overflow: hidden; }
+        .card-body { padding: 1.5rem; }
+        .card-body h3 {
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        .card-body p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+        .card-tag {
+            display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px;
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+            background: var(--accent-glow); color: var(--accent);
+            margin-bottom: 0.75rem; font-weight: 500;
+        }
+
+        /* === SUBSYSTEM DETAIL === */
+        .subsystem {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+            align-items: center; margin-bottom: 5rem;
+            padding: 2.5rem; border-radius: var(--radius);
+            background: var(--bg-card); border: 1px solid var(--border);
+        }
+        .subsystem:nth-child(even) .subsystem-img { order: -1; }
+        .subsystem-img {
+            width: 100%; border-radius: 12px; overflow: hidden;
+        }
+        .subsystem-img img {
+            width: 100%; height: auto; display: block;
+            transition: transform 0.5s ease;
+        }
+        .subsystem:hover .subsystem-img img { transform: scale(1.03); }
+        .subsystem h3 {
+            font-size: 1.6rem; font-weight: 600; margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+        .subsystem p { color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem; margin-bottom: 1rem; }
+        .subsystem ul { list-style: none; padding: 0; }
+        .subsystem ul li {
+            padding: 0.4rem 0; color: var(--text-secondary); font-size: 0.9rem;
+            padding-left: 1.2rem; position: relative;
+        }
+        .subsystem ul li::before {
+            content: ''; position: absolute; left: 0; top: 50%;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--accent); transform: translateY(-50%);
+        }
+
+        /* === PROBLEM-SOLUTION === */
+        .ps-block {
+            display: flex; gap: 1rem; margin-top: 1rem;
+        }
+        .ps-item {
+            flex: 1; padding: 1rem; border-radius: 12px;
+            border: 1px solid var(--border); font-size: 0.85rem;
+        }
+        .ps-item.problem { border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); }
+        .ps-item.solution { border-color: rgba(34, 197, 94, 0.3); background: rgba(34, 197, 94, 0.05); }
+        .ps-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+            font-weight: 600; margin-bottom: 0.4rem;
+        }
+        .ps-item.problem .ps-label { color: #ef4444; }
+        .ps-item.solution .ps-label { color: #22c55e; }
+        .ps-item p { color: var(--text-secondary); line-height: 1.5; margin: 0; }
+
+        /* === TIMELINE === */
+        .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 2px; background: linear-gradient(to bottom, var(--accent), rgba(56,189,248,0.1));
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 2.5rem; padding-left: 1.5rem;
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -2rem; top: 6px;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--accent); border: 2px solid var(--bg);
+            box-shadow: 0 0 12px rgba(56,189,248,0.4);
+            transform: translateX(-4px);
+        }
+        .timeline-date {
+            font-size: 0.75rem; color: var(--accent); text-transform: uppercase;
+            letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 500;
+        }
+        .timeline-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .timeline-item p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* === TEAM GRID === */
+        .team-photo {
+            width: 100%; border-radius: var(--radius); overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        .team-photo img { width: 100%; height: auto; display: block; }
+
+        /* === SPONSORS === */
+        .sponsors-grid {
+            display: flex; flex-wrap: wrap; gap: 2rem;
+            align-items: center; justify-content: center;
+            padding: 2rem 0;
+        }
+        .sponsor-logo {
+            height: 40px; opacity: 0.5; filter: grayscale(1) brightness(2);
+            transition: opacity 0.3s, filter 0.3s;
+        }
+        .sponsor-logo:hover { opacity: 1; filter: grayscale(0) brightness(1); }
+
+        /* === TESTIMONIALS === */
+        .testimonials-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; margin-top: 2rem;
+        }
+        .testimonial {
+            padding: 1.5rem; border-radius: var(--radius);
+            background: var(--bg-card); border: 1px solid var(--border);
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
+            font-style: italic; position: relative;
+            transition: border-color 0.4s;
+        }
+        .testimonial:hover { border-color: rgba(56,189,248,0.3); }
+        .testimonial::before {
+            content: '\201C'; position: absolute; top: 0.5rem; left: 1rem;
+            font-size: 3rem; color: var(--accent); opacity: 0.3;
+            font-style: normal; line-height: 1;
+        }
+        .testimonial-text { padding-top: 1.5rem; }
+        .testimonial-author {
+            margin-top: 1rem; font-style: normal; font-weight: 500;
+            color: var(--text-primary); font-size: 0.8rem;
+        }
+
+        /* === DESIGN PROCESS === */
+        .process-steps {
+            display: grid; grid-template-columns: repeat(5, 1fr);
+            gap: 0; margin: 2rem 0; position: relative;
+        }
+        .process-step {
+            text-align: center; padding: 1.5rem 0.5rem; position: relative;
+        }
+        .process-step::after {
+            content: ''; position: absolute; top: calc(1.5rem + 24px); right: 0;
+            width: 50%; height: 2px; background: var(--border);
+        }
+        .process-step::before {
+            content: ''; position: absolute; top: calc(1.5rem + 24px); left: 0;
+            width: 50%; height: 2px; background: var(--border);
+        }
+        .process-step:first-child::before { display: none; }
+        .process-step:last-child::after { display: none; }
+        .process-icon {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--accent-glow); border: 2px solid rgba(56,189,248,0.3);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 0.75rem; font-size: 1.2rem; position: relative; z-index: 1;
+        }
+        .process-step h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .process-step p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; }
+
+        /* === IMAGE CAROUSEL === */
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            background: var(--bg-card);
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.15);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .carousel-btn:hover {
+            background: rgba(0,0,0,0.7);
+        }
+        .carousel-btn.prev { left: 1rem; }
+        .carousel-btn.next { right: 1rem; }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .carousel-dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        /* === BLOG MODAL === */
+        .blog-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        .blog-modal-overlay.active { display: flex; justify-content: center; }
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .blog-modal {
+            width: 100%;
+            max-width: 760px;
+            margin: 2rem auto;
+            padding: 0 1rem 6rem;
+            animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .blog-modal-close {
+            position: fixed;
+            top: 1.5rem; right: 1.5rem;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2001;
+            transition: background 0.3s;
+        }
+        .blog-modal-close:hover { background: rgba(255,255,255,0.2); }
+        .blog-modal-hero {
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            aspect-ratio: 16/9;
+        }
+        .blog-modal-hero img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .blog-modal-meta {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.5rem; flex-wrap: wrap;
+        }
+        .blog-modal-meta .card-tag { margin-bottom: 0; }
+        .blog-modal-meta span {
+            font-size: 0.8rem; color: var(--text-secondary);
+        }
+        .blog-modal h2 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 700; letter-spacing: -0.03em;
+            line-height: 1.2; margin-bottom: 1.5rem;
+        }
+        .blog-modal-content h3 {
+            font-size: 1.2rem; font-weight: 600;
+            margin: 2rem 0 0.75rem; color: var(--text-primary);
+        }
+        .blog-modal-content p {
+            font-size: 1rem; color: var(--text-secondary);
+            line-height: 1.8; margin-bottom: 1rem;
+        }
+        .blog-modal-content { padding-bottom: 4rem; }
+        .blog-modal-back {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--accent); font-size: 0.85rem;
+            cursor: pointer; margin-bottom: 1.5rem;
+            border: none; background: none;
+            transition: opacity 0.3s;
+        }
+        .blog-modal-back:hover { opacity: 0.7; }
+
+        /* === FOOTER === */
+        footer {
+            padding: 3rem 2rem; text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        footer p { color: var(--text-secondary); font-size: 0.85rem; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* === MOBILE === */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 52px; left: 0; right: 0;
+                background: rgba(0,0,0,0.95); padding: 1rem 2rem;
+                gap: 0; border-bottom: 1px solid var(--border);
+            }
+            .nav-links.open a { padding: 0.75rem 0; display: block; }
+            .hamburger { display: block; }
+            .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+            .hamburger.open span:nth-child(2) { opacity: 0; }
+            .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+            .subsystem { grid-template-columns: 1fr; }
+            .subsystem:nth-child(even) .subsystem-img { order: 0; }
+            .process-steps { grid-template-columns: 1fr; gap: 0.5rem; }
+            .process-step::before, .process-step::after { display: none; }
+            .ps-block { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <div class="nav-brand" data-page="home"><img src="images/logo_transparent.png" alt="Leviathan Logo"><span>25667</span> Leviathan Robotics</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a data-page="home" class="active">Home</a></li>
+            <li><a data-page="hardware">Hardware</a></li>
+            <li><a data-page="software">Software</a></li>
+            <li><a data-page="outreach">Outreach</a></li>
+            <li><a data-page="blog">Blog</a></li>
+            <li><a data-page="summercamp">Summer Camp</a></li>
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScuVUTgoHSTFyaJSBdNFZU52Mxc0Yiyoh7AfO_OLUXmB9x1SQ/viewform" target="_blank" rel="noopener" style="color: var(--accent);">Join Leviathan</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page active" id="page-home">
+
+    <!-- HERO -->
+    <div class="hero">
+        <img src="images/logo_transparent.png" alt="Leviathan Robotics Logo" class="hero-logo">
+        <div class="hero-badge">FTC Team 25667 &mdash; Sandshrew Regionals</div>
+        <h1>Leviathan<br>Robotics</h1>
+        <p>Inspiring innovation, teamwork, and a passion for STEM through the challenges of robotics. Built with precision. Driven by purpose.</p>
+        <div class="hero-robot">
+            <img src="images/page16_img2.jpg" alt="Sandshrew Robot CAD render">
+        </div>
+    </div>
+
+    <!-- WHO WE ARE -->
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">Who We Are</div>
+                <div class="section-title">Spreading the Joy of Robotics</div>
+                <div class="section-subtitle" style="max-width: 800px;">Leviathan Robotics is a community-based robotics club founded by students at Saratoga High School, dedicated to innovation, teamwork, and engineering excellence.</div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-bottom: 3rem;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Mission</div>
+                        <h3>Building More Than Robots</h3>
+                        <p>Founded in 2024, our team is committed to exploring the exciting world of robotics through hands-on learning, innovation, and teamwork. Our mission is to build and program robots and inspire and share the joy of robotics with our school and the wider community. We aim to create an inclusive environment where students of all skill levels can come together, collaborate, and discover the endless possibilities that robotics offers.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Values</div>
+                        <h3>Creativity &amp; Collaboration</h3>
+                        <p>At Leviathan Robotics, we foster creativity, problem-solving, and critical thinking while emphasizing the importance of perseverance and collaboration. We believe that by building robots, we are developing technical skills and learning how to work effectively as a team, adapt to challenges, and think outside the box.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Impact</div>
+                        <h3>Inspiring the Future</h3>
+                        <p>Whether it's competing in local or national robotics competitions, hosting workshops, or participating in community outreach, we are dedicated to making robotics accessible and enjoyable for everyone. Through our work, we hope to spark curiosity, inspire the next generation of engineers, and contribute to a future where robotics plays a key role in shaping the world.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="section-label">At a Glance</div>
+                <div class="section-title">Our Team</div>
+            </div>
+
+            <div class="stats-bar reveal">
+                <div class="stat reveal-delay-1">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat reveal-delay-2">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Sponsors</div>
+                </div>
+                <div class="stat reveal-delay-3">
+                    <div class="stat-number">45k+</div>
+                    <div class="stat-label">People Reached</div>
+                </div>
+                <div class="stat reveal-delay-4">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Robot Versions</div>
+                </div>
+            </div>
+
+            <div class="team-photo reveal">
+                <img src="images/page2_img2.jpg" alt="Team photo of Leviathan Robotics members">
+            </div>
+
+            <div class="sponsors-grid reveal">
+                <svg class="sponsor-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000" style="height:36px;width:auto;"><path fill="currentColor" d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.3-81.8-105.4-209.6-105.4-330.8 0-194.3 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-53.7 83.6-53.7 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.4 0 103-30.6 138.1-71.4z"/></svg>
+                <img src="images/page1_img8.jpg" alt="Meta" class="sponsor-logo">
+                <img src="images/page1_img4.jpg" alt="ServiceNow" class="sponsor-logo">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-secondary);">
+            <p>Website designed by Aaryan Shah</p>
+            <p style="margin-top: 0.4rem;">leviathanrobotics24@gmail.com &bull; <a href="https://instagram.com/leviathanrobotics25667" target="_blank" style="color: var(--accent); text-decoration: none;">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== HARDWARE PAGE ==================== -->
+<div class="page" id="page-hardware">
+    <section>
+        <div class="section-inner">
+
+            <!-- Design Process -->
+            <div class="reveal">
+                <div class="section-label">Engineering</div>
+                <div class="section-title">Design Process</div>
+                <div class="section-subtitle">A rigorous, iterative approach from concept to competition-ready robot.</div>
+            </div>
+
+            <div class="process-steps reveal">
+                <div class="process-step">
+                    <div class="process-icon">1</div>
+                    <h4>Brainstorm</h4>
+                    <p>Discuss high-level design and identify major subsystems</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon">2</div>
+                    <h4>Design</h4>
+                    <p>Create effective prototypes with full CAD models</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon">3</div>
+                    <h4>Prototype</h4>
+                    <p>Laser-cut wood & 3D-printed parts to evaluate ideas</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon">4</div>
+                    <h4>Build & Test</h4>
+                    <p>Custom-cut metal and high-quality 3D prints</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon">5</div>
+                    <h4>Improve</h4>
+                    <p>Refine for performance, speed, and reliability</p>
+                </div>
+            </div>
+
+            <!-- Drivetrain -->
+            <div class="subsystem reveal" style="margin-top: 4rem;">
+                <div>
+                    <div class="card-tag">Drivetrain</div>
+                    <h3>Vertical Drivetrain</h3>
+                    <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
+                    <ul>
+                        <li>Bevel-gear and vertical-motor design for seamless spindexer integration</li>
+                        <li>Two odometry pods at center for optimal localization</li>
+                        <li>Compact form factor with base-level spindexer</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Tradeoff</div>
+                            <p>Vertical motors make turret integration more difficult</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Developed innovative inverted turret layout to recover critical space</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page9_img3.jpg" alt="Drivetrain CAD">
+                </div>
+            </div>
+
+            <!-- Spindexer -->
+            <div class="subsystem reveal">
+                <div class="subsystem-img">
+                    <img src="images/page10_img3.jpg" alt="Spindexer detail">
+                </div>
+                <div>
+                    <div class="card-tag">Sorting</div>
+                    <h3>Spindexer</h3>
+                    <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
+                    <ul>
+                        <li>Solid, smooth interior walls to reduce snag points</li>
+                        <li>Enlarged spinner with extended arms for maximum grip</li>
+                        <li>Mounts both Control Hub and Expansion Hub along its side</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Problem</div>
+                            <p>Artifacts got stuck on standoffs; spinner had minimal contact</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Replaced standoffs with solid walls; enlarged spinner diameter</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Turret -->
+            <div class="subsystem reveal">
+                <div>
+                    <div class="card-tag">Aiming</div>
+                    <h3>Turret</h3>
+                    <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
+                    <ul>
+                        <li>Metal ball bearings for 4x faster rotation vs. 3D-printed version</li>
+                        <li>Modularized from flywheel for faster iteration cycles</li>
+                        <li>Innovative attachment points for stability and fast prototyping</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Problem</div>
+                            <p>3D-printed turret was slow &mdash; couldn't use ball bearings</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Replaced with manufactured turntable bearing turret &mdash; 4x faster</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page11_img3.jpg" alt="Turret design">
+                </div>
+            </div>
+
+            <!-- Flywheel -->
+            <div class="subsystem reveal">
+                <div class="subsystem-img">
+                    <img src="images/page12_img2.jpg" alt="Flywheel system">
+                </div>
+                <div>
+                    <div class="card-tag">Shooting</div>
+                    <h3>Flywheel</h3>
+                    <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
+                    <ul>
+                        <li>Calculates distance to goal using camera angle data</li>
+                        <li>Regression model maps speed to shooting distance</li>
+                        <li>Tungsten putty increases inertia for longer shots</li>
+                        <li>Compatible with Limelight 3a and turret system</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Intake -->
+            <div class="subsystem reveal">
+                <div>
+                    <div class="card-tag">Collection</div>
+                    <h3>Intake</h3>
+                    <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
+                    <ul>
+                        <li>Rubber band wheels provide consistent grip and pull on artifacts</li>
+                        <li>Enlarged funnel ramp design to absorb high-speed impacts</li>
+                        <li>Sandpaper-enhanced surfaces for additional traction</li>
+                        <li>Protective funnel guards against wall and robot collisions</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Lesson Learned</div>
+                            <p>Control Hub mounted at 45&deg; inside spindexer caused IMU misalignment, breaking Road Runner odometry</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Fix</div>
+                            <p>Relocated Control Hub to vertical mount on top of spindexer, restoring proper odometry</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page13_img5.jpg" alt="Intake system with rubber band wheels">
+                </div>
+            </div>
+
+            <!-- Sensors -->
+            <div class="reveal" style="margin-top: 2rem;">
+                <div class="section-label">Sensors</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Suite</div>
+            </div>
+            <div class="card-grid reveal" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Vision</div>
+                        <h3>Limelight 3A</h3>
+                        <p>Precise aiming via real-time AprilTag detection. Provides autonomous localization and dynamic flywheel speed adjustment using trigonometric distance calculations.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Detection</div>
+                        <h3>Color Sensor V3</h3>
+                        <p>Detects incoming ball presence and color for automatic sorting during autonomous. Position carefully tuned for consistent detection accuracy.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Tracking</div>
+                        <h3>2M Distance Sensor</h3>
+                        <p>Detects when a ball leaves the system and updates the ball count. Repositioned upward for longer sampling window to prevent missed detections.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Robot Progression -->
+            <div class="reveal" style="margin-top: 5rem;">
+                <div class="section-label">Evolution</div>
+                <div class="section-title">Robot Progression</div>
+            </div>
+            <div class="timeline reveal">
+                <div class="timeline-item">
+                    <div class="timeline-date">Winter &mdash; Play Space Qualifier</div>
+                    <h4>Version 1</h4>
+                    <p>Enclosed spindexer for sorting, simple flywheel for close-range shots. Featured tungsten putty inside flywheel to increase inertia for faster, further shooting.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">January &mdash; Santa Clara Qualifier</div>
+                    <h4>Version 2</h4>
+                    <p>Added belt-driven turret with stacked bearings and 3D-printed base. Mounted Limelight 3A camera on flywheel for optimal height and turret compatibility.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March &mdash; NorCal Regionals</div>
+                    <h4>Version 3</h4>
+                    <p>Upgraded to manufactured turntable turret with metal ball bearings for reduced friction. Slimmed spindexer walls for smoother rotation. Competition-ready build.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== SOFTWARE PAGE ==================== -->
+<div class="page" id="page-software">
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">Software</div>
+                <div class="section-title">Intelligent Control Systems</div>
+                <div class="section-subtitle">Advanced autonomous navigation, computer vision, and precise motion control power our robot's performance.</div>
+            </div>
+
+            <!-- Road Runner -->
+            <div class="subsystem reveal">
+                <div>
+                    <div class="card-tag">Navigation</div>
+                    <h3>Road Runner</h3>
+                    <p>Road Runner provides precise path planning, generating smooth trajectories during autonomous for predictable robot movement. Combined with sensor data for accurate localization.</p>
+                    <ul>
+                        <li>Enhanced localization with odometry integration</li>
+                        <li>Auto-correction and real-time path adjustment</li>
+                        <li>Robust recovery when bumped off course</li>
+                    </ul>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page9_img5.jpg" alt="Odometry system">
+                </div>
+            </div>
+
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Challenge</div>
+                        <h3>Turning Inconsistencies</h3>
+                        <p>Selecting the wrong driving mode (Mecanum Drive vs Programming Board) caused unpredictable turning behavior. After extensive troubleshooting, we learned to correctly switch between modes for consistent performance.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Challenge</div>
+                        <h3>Complex Tuning Process</h3>
+                        <p>Over 10 hours adjusting nearly 40 variables with extreme values. Added teammates to reset the robot each cycle and used Desmos to visualize equations, significantly streamlining the process.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vision / Limelight software side -->
+            <div class="subsystem reveal" style="margin-top: 3rem;">
+                <div class="subsystem-img">
+                    <img src="images/page12_img3.jpg" alt="Distance modeling graph">
+                </div>
+                <div>
+                    <div class="card-tag">Computer Vision</div>
+                    <h3>AprilTag Detection & Distance Modeling</h3>
+                    <p>The Limelight 3A provides real-time target alignment by detecting AprilTags on the goal. Our software calculates exact distance using camera angle data, then uses a regression model to determine optimal flywheel speed.</p>
+                    <ul>
+                        <li>Trigonometric distance calculation from camera angles</li>
+                        <li>Regression-based speed-to-distance mapping</li>
+                        <li>Vision-based failsafe for odometry drift correction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Autonomous sensor fusion -->
+            <div class="reveal" style="margin-top: 2rem;">
+                <div class="section-label">Autonomy</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Fusion</div>
+                <div class="section-subtitle">Multiple sensor inputs combine for reliable autonomous performance.</div>
+            </div>
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Odometry</div>
+                        <h3>Dual Odometry Pods</h3>
+                        <p>Two pods at the robot's center provide optimal placement for accurate localization, working with Road Runner's path correction algorithms.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Color Sorting</div>
+                        <h3>Autonomous Ball Sorting</h3>
+                        <p>Color Sensor V3 detects incoming ball color and triggers automatic sorting logic during autonomous, allowing the spindexer to arrange artifacts in the required pattern.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Redundancy</div>
+                        <h3>Vision-Based Fallback</h3>
+                        <p>Limelight serves as a redundancy system, providing vision-based targeting as a failsafe to correct positional errors from odometry drift.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== OUTREACH PAGE ==================== -->
+<div class="page" id="page-outreach">
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">Community Impact</div>
+                <div class="section-title">Spreading FIRST</div>
+                <div class="section-subtitle">Connecting with communities locally and internationally to inspire the next generation of innovators.</div>
+            </div>
+
+            <div class="stats-bar reveal">
+                <div class="stat">
+                    <div class="stat-number">45k+</div>
+                    <div class="stat-label">Total People Reached</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">$3,500</div>
+                    <div class="stat-label">Raised via Summer Camp</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Hours Recycling Filament</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Countries Reached</div>
+                </div>
+            </div>
+
+            <!-- Outreach Events -->
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <img src="images/page5_img3.jpg" class="card-img" alt="Argonaut Science Fair">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Event</div>
+                        <h3>Argonaut Science Fair</h3>
+                        <p>Partnered with Argonaut Elementary School to showcase our robot, introducing the FIRST programs and promoting FIRST values to 200+ attendees.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <img src="images/page5_img4.jpg" class="card-img" alt="Tech Museum">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Event</div>
+                        <h3>San Jose Tech Museum</h3>
+                        <p>Showcased our robot at one of the region's most vibrant innovation hubs. Our hands-on "fun-play" experience became a crowd favorite, engaging 500+ visitors.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <img src="images/page6_img3.jpg" class="card-img" alt="Technical Outreach">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Education</div>
+                        <h3>Stanford CAD Workshop</h3>
+                        <p>Partnered with a Stanford professor in radiation oncology to teach advanced CAD design to 60+ people, connecting top science communities with FIRST.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SustainPrint -->
+            <div class="subsystem reveal" style="margin-top: 3rem;">
+                <div>
+                    <div class="card-tag">Sustainability</div>
+                    <h3>SustainPrint Initiative</h3>
+                    <p>We launched a filament recycling program to turn waste into possibility. Partnering with Stanford University's Department of Radiation Oncology and Maker Nexus, we built a bridge between cutting-edge research and the local STEM community.</p>
+                    <ul>
+                        <li>100+ hours reprocessing 6.5kg+ of filament waste</li>
+                        <li>Reproduced 20+ spools of high-quality recycled material</li>
+                        <li>Several spools used to prototype our competition robot</li>
+                        <li>Recycled 4 large boxes of waste from Maker Nexus makerspace</li>
+                    </ul>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page4_img8.jpg" alt="SustainPrint recycling bins">
+                </div>
+            </div>
+
+            <!-- Summer Camp -->
+            <div class="subsystem reveal" style="cursor: pointer; transition: border-color 0.4s, box-shadow 0.4s;" onclick="currentPage='outreach'; showPage('summercamp');" onmouseover="this.style.borderColor='rgba(56,189,248,0.4)'; this.style.boxShadow='0 8px 40px rgba(56,189,248,0.1)';" onmouseout="this.style.borderColor=''; this.style.boxShadow='';">
+                <div class="subsystem-img">
+                    <img src="images/page7_img7.jpg" alt="FLL Summer Camp group">
+                </div>
+                <div>
+                    <div class="card-tag">Mentorship</div>
+                    <h3>FLL Summer Camp <span style="font-size: 0.8rem; color: var(--accent); font-weight: 400;">&rarr; View Details</span></h3>
+                    <p>A 5-day full-time camp for 15 children (2nd&ndash;8th grade) new to robotics. Our comprehensive curriculum integrated STEM concepts, FIRST principles, and FLL fundamentals.</p>
+                    <ul>
+                        <li>Average rating of 4.9/5 stars from anonymous survey</li>
+                        <li>Raised $3,500 for team development</li>
+                        <li>Most families expressed strong interest in FIRST programs</li>
+                        <li>Hands-on building, coding, and problem-solving curriculum</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="reveal" style="margin-top: 2rem;">
+                <div class="section-label">Feedback</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">What parents are saying</div>
+            </div>
+            <div class="testimonials-grid reveal">
+                <div class="testimonial">
+                    <div class="testimonial-text">My son Luke had such a great time last week! He learnt so much about robotics/coding knowledge. Is there any way my son can keep in touch with the Leviathan robotics team throughout the school year?</div>
+                    <div class="testimonial-author">&mdash; Joyce Ho</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">My son thoroughly enjoyed the camp. It was a great mix of robotics, STEM, and playtime. Very impressed with the instructors at this age!</div>
+                    <div class="testimonial-author">&mdash; Anonymous</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">I am extremely grateful for your patient teaching. We felt blessed to have enrolled Isaac into Leviathan Robotic camp.</div>
+                    <div class="testimonial-author">&mdash; Jessie Liu</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">We truly thank you for all the activities this camp has offered. If you have future programs or activities, we would love to hear about them so she can join.</div>
+                    <div class="testimonial-author">&mdash; Ariel Kuo</div>
+                </div>
+            </div>
+
+            <!-- International Outreach -->
+            <div class="card-grid reveal" style="margin-top: 3rem;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Global</div>
+                        <h3>International Outreach</h3>
+                        <p>Team members traveled to the Caribbean, Turkey, China, Japan, and Taiwan to spread the idea of FTC, reaching 50+ people from various backgrounds across 5 countries.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Hosting</div>
+                        <h3>FRC & FLL Partnerships</h3>
+                        <p>Hosted events connecting FRC teams with FLL families, bringing together diverse FIRST community members to strengthen the robotics ecosystem in our region.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== BLOG PAGE ==================== -->
+<div class="page" id="page-blog">
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">Blog</div>
+                <div class="section-title">Leviathan Robotics Blog</div>
+                <div class="section-subtitle" style="max-width: 700px;">Welcome to the Leviathan Robotics blog! Here you will find exciting updates and insightful articles about our robotics club at Saratoga High School in Saratoga, California. Join us on our journey as we participate in the annual FIRST Tech Challenge (FTC) and spread the joy of robotics in our community.</div>
+            </div>
+
+            <div class="card-grid reveal">
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(0)">
+                    <div class="card-body">
+                        <div class="card-tag">Competition</div>
+                        <h3>Team 25667's Success at Northern California Regionals</h3>
+                        <p>Selected as alliance captain at NorCal Regionals, Team 25667 partnered with the Infinite Loop for an incredible playoff run showcasing teamwork and strategy.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Mar 10, 2026 &bull; 1 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(1)">
+                    <div class="card-body">
+                        <div class="card-tag">Season Recap</div>
+                        <h3>Team 25667 Leviathan Robotics at the FTC Decode Season: A Journey of Growth</h3>
+                        <p>A look back at our second qualifier at Santa Clara High School where we achieved four wins, one loss, and earned the prestigious Inspire Award.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Mar 9, 2026 &bull; 1 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(2)">
+                    <div class="card-body">
+                        <div class="card-tag">Competition</div>
+                        <h3>Team 25667's Inspiring Journey at the San Jose Robotics Tournament</h3>
+                        <p>Our inaugural qualifier at San Jose's Playspace, where we allied with Team 19819 AstroBruins to advance to the finals and earn the Innovate Award.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Mar 8, 2026 &bull; 1 min read</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-top:1.5rem;">
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(3)">
+                    <div class="card-body">
+                        <div class="card-tag">Outreach</div>
+                        <h3>Leviathan Robotics: Engaging the Future of Innovation at the San Jose Tech Museum</h3>
+                        <p>Our August 2025 exhibition at the San Jose Tech Museum featuring an interactive fun-play robot experience that engaged 500+ visitors.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Feb 10, 2026 &bull; 2 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(4)">
+                    <div class="card-body">
+                        <div class="card-tag">Outreach</div>
+                        <h3>Leviathan Robotics at the Argonaut Elementary Science Fair: Inspiring Future Innovators</h3>
+                        <p>Showcasing our robot and programming demos to 200+ community members at the Argonaut Elementary School Science Fair.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Feb 10, 2026 &bull; 2 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(5)">
+                    <div class="card-body">
+                        <div class="card-tag">Award</div>
+                        <h3>Celebrating Our Success at the FTC Northern California Regionals</h3>
+                        <p>Advancing through qualifiers to elimination rounds and receiving the Judge's Choice Award for exceptional creativity, teamwork, and engineering.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Apr 20, 2025 &bull; 2 min read</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-top:1.5rem;">
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(6)">
+                    <div class="card-body">
+                        <div class="card-tag">Scrimmage</div>
+                        <h3>Preparing for Regionals: A Successful Scrimmage with FTC Teams</h3>
+                        <p>Hosting Cheesy Bytes, Kuriosity Robotics, and Quixilver for a pre-regionals practice competition full of strategy sharing and learning.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Feb 20, 2025 &bull; 1 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(7)">
+                    <div class="card-body">
+                        <div class="card-tag">Competition</div>
+                        <h3>Victory at the Playspace 2 FTC Competition: A Journey to Regionals</h3>
+                        <p>An undefeated 6-0 qualifying record and Winning Alliance Captain award that secured our spot at the regional championship.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Dec 8, 2024 &bull; 1 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(8)">
+                    <div class="card-body">
+                        <div class="card-tag">Education</div>
+                        <h3>Empowering Young Minds: Multiple CAD Classes for Children</h3>
+                        <p>Introductory CAD classes for kids and an advanced session with a Stanford professor covering design efficiency and sustainability.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Nov 14, 2024 &bull; 2 min read</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-top:1.5rem;">
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(9)">
+                    <div class="card-body">
+                        <div class="card-tag">Global</div>
+                        <h3>Global Outreach in Robotics: Inspiring the New Generation</h3>
+                        <p>International robotics education across the Caribbean, Japan, Taiwan, China, and Turkey, distributing materials and fostering FIRST awareness.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Jul 28, 2024 &bull; 2 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(10)">
+                    <div class="card-body">
+                        <div class="card-tag">Community</div>
+                        <h3>Empowering Communities Through FIRST Robotics Programs</h3>
+                        <p>Introducing FLL and FRC programs to the community through presentations featuring team members sharing their experiences and achievements.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Jul 17, 2024 &bull; 1 min read</div>
+                    </div>
+                </div>
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(11)">
+                    <div class="card-body">
+                        <div class="card-tag">Summer Camp</div>
+                        <h3>Empowering Young Minds: Leviathan Robotics Summer Camp at Argonaut Elementary</h3>
+                        <p>Hands-on robotics outreach at Argonaut Elementary with Lego building, FLL game boards, and an introduction to the FIRST Tech Challenge.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Jul 16, 2024 &bull; 2 min read</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-top:1.5rem;">
+                <div class="card" style="cursor:pointer;" onclick="openBlogPost(12)">
+                    <div class="card-body">
+                        <div class="card-tag">Team</div>
+                        <h3>Meet the FTC Team: Leviathan Robotics</h3>
+                        <p>Get to know our five founding members — Evan, Ethan, Vishak, Ambrose, and Luca — and their unique roles in coding, hardware, CAD, and communication.</p>
+                        <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--accent);">Jun 12, 2024 &bull; 2 min read</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== SUMMER CAMP PAGE ==================== -->
+<div class="page" id="page-summercamp">
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">Summer Camp</div>
+                <div class="section-title">FLL Robotics Summer Camp</div>
+                <div class="section-subtitle" style="max-width: 700px;">A week-long program blending FIRST LEGO League robotics instruction with hands-on STEM activities. Mornings focus on FLL robotics, afternoons on exciting STEM experiments.</div>
+            </div>
+
+            <div class="stats-bar reveal">
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Days of Learning</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2nd&ndash;5th</div>
+                    <div class="stat-label">Grade Levels</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4.9/5</div>
+                    <div class="stat-label">Parent Rating</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">$3,500</div>
+                    <div class="stat-label">Raised for Team</div>
+                </div>
+            </div>
+
+            <!-- Daily Breakdown -->
+            <div class="reveal" style="margin-top: 3rem;">
+                <div class="section-label">Schedule</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Daily Breakdown</div>
+            </div>
+
+            <div class="timeline reveal">
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 1 &mdash; Foundations</div>
+                    <h4>Building Challenges &amp; Intro to Engineering</h4>
+                    <p>LEGO building challenges including tower construction, introduction to structural engineering concepts, and initial Generation Genius STEM kits.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 2 &mdash; FLL Concepts</div>
+                    <h4>Field Assembly &amp; Competition Rules</h4>
+                    <p>FLL field assembly, learning competition rules through trivia challenges. Afternoon activities include Snap Circuits, wind turbine models, and tower-building with spaghetti and marshmallows.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 3 &mdash; Advanced Robotics</div>
+                    <h4>Sensors &amp; Competition-Ready Design</h4>
+                    <p>Introduction to light and touch sensors, competition-ready robot design sessions. Chemistry experiments including volcanoes and milk/food coloring demonstrations.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 4 &mdash; Coding &amp; Competition Prep</div>
+                    <h4>Spike Prime &amp; Line-Following</h4>
+                    <p>Spike Prime coding app training, line-following programming challenges. Multiple STEM stations, pottery activities, and the Egg Drop Challenge.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 5 &mdash; Showcase &amp; Celebration</div>
+                    <h4>Demo Competition &amp; Closing</h4>
+                    <p>Robotics demonstration competition, refined Egg Drop finale, and closing celebration with snacks and socializing. Campers showcase everything they've built and learned.</p>
+                </div>
+            </div>
+
+            <!-- Camp Photos Carousel -->
+            <div class="reveal" style="margin-top: 3rem;">
+                <div class="section-label">Gallery</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Camp Highlights</div>
+            </div>
+
+            <div class="reveal">
+                <div class="carousel" id="campCarousel">
+                    <div class="carousel-track" id="campCarouselTrack">
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_3594-YD0Ezo6G1VF55LXa.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_3811-YD0Ezo6QO6sPBQkw.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_3571-A1azj9wp2bC1gg5n.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9738-AoP4kbvwLesO4GEw.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9949-YyvDG43gaDUoJ0Kl.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9732-Yle4ZbvGknCB0ELw.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9856-YKb89W6D9EF1azvv.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/eb1adee2-3ecd-418a-9b9c-d2429d543bfd_1_201_a-dWxLjQy5qGhaROr3.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9801-AzGMn4eLVLTDbaKo.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9847-YX4jNVynJGu97a7z.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9942-m2Wq69pn6ZCqKMbZ.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/d76f65e8-9e6f-42e9-94d0-815e923f1506_1_201_a-AGBzNy6a0GS0kvem.jpg" alt="Summer camp activity"></div>
+                        <div class="carousel-slide"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/m6Lr6jMQxxSbKBrB/img_9916-mxB2kbZbnPSNryLK.jpg" alt="Summer camp activity"></div>
+                    </div>
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#8249;</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)">&#8250;</button>
+                </div>
+                <div class="carousel-dots" id="campCarouselDots"></div>
+            </div>
+
+            <!-- Learning Outcomes -->
+            <div class="reveal" style="margin-top: 3rem;">
+                <div class="section-label">Outcomes</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">What Campers Learn</div>
+            </div>
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Engineering</div>
+                        <h3>Building &amp; Design</h3>
+                        <p>Engineering principles, structural design, and hands-on construction with LEGO and other materials.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Coding</div>
+                        <h3>Programming Fundamentals</h3>
+                        <p>Spike Prime coding, line-following algorithms, and sensor-based programming for autonomous robots.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Teamwork</div>
+                        <h3>Collaboration &amp; Problem-Solving</h3>
+                        <p>Working effectively in teams, adapting to challenges, creative problem-solving, and scientific reasoning.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="reveal" style="margin-top: 3rem;">
+                <div class="section-label">Feedback</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">What parents are saying</div>
+            </div>
+            <div class="testimonials-grid reveal">
+                <div class="testimonial">
+                    <div class="testimonial-text">My son Luke had such a great time last week! He learnt so much about robotics/coding knowledge. Is there any way my son can keep in touch with the Leviathan robotics team throughout the school year?</div>
+                    <div class="testimonial-author">&mdash; Joyce Ho</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">My son thoroughly enjoyed the camp. It was a great mix of robotics, STEM, and playtime. Very impressed with the instructors at this age!</div>
+                    <div class="testimonial-author">&mdash; Anonymous</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">I am extremely grateful for your patient teaching. We felt blessed to have enrolled Isaac into Leviathan Robotic camp.</div>
+                    <div class="testimonial-author">&mdash; Jessie Liu</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">We truly thank you for all the activities this camp has offered. If you have future programs or activities, we would love to hear about them so she can join.</div>
+                    <div class="testimonial-author">&mdash; Ariel Kuo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- BLOG MODAL -->
+<div class="blog-modal-overlay" id="blogModal">
+    <button class="blog-modal-close" onclick="closeBlogModal()">&times;</button>
+    <div class="blog-modal">
+        <button class="blog-modal-back" onclick="closeBlogModal()">&larr; Back to Blog</button>
+        <div class="blog-modal-hero" id="blogModalHero"></div>
+        <div class="blog-modal-meta" id="blogModalMeta"></div>
+        <h2 id="blogModalTitle"></h2>
+        <div class="blog-modal-content" id="blogModalContent"></div>
+    </div>
+</div>
+
+<script>
+    // Blog post data
+    const blogPosts = [
+        {
+            id: 'post8',
+            tag: 'Competition',
+            title: "Team 25667's Success at Northern California Regionals",
+            date: 'Mar 10, 2026',
+            readTime: '1 min read',
+            image: 'https://images.unsplash.com/photo-1578803203370-8b000b589edd?auto=format&fit=crop&w=1200&h=630',
+            content: `<h3>Introduction</h3>
+<p>Team 25667, also known as Leviathan Robotics, recently concluded our participation in the Northern California Regionals. This competition was a culmination of months of hard work, dedication, and relentless improvement. Competing against some of the best teams in the region, we were proud to showcase our robot and demonstrate our growth as a team.</p>
+<h3>Alliance Formation and Strategy</h3>
+<p>During the regionals, Team 25667 had the distinct honor of being selected as an alliance captain, a testament to our robot's capabilities and our team's reputation. We formed a powerful alliance with the Infinite Loop, combining our strengths to create a formidable partnership on the field.</p>
+<h3>Performance Highlights</h3>
+<p>In the playoffs, our collaboration truly shone. The synergy between Leviathan Robotics and the Infinite Loop allowed us to execute complex strategies with precision. Our robot performed exceptionally well in both autonomous and driver-controlled periods, consistently scoring high and contributing to our alliance's success.</p>
+<h3>Conclusion and Future Prospects</h3>
+<p>Participating in the Northern California Regionals was a significant achievement for Team 25667. We demonstrated that with hard work, innovation, and teamwork, we can compete at the highest levels. As we look forward, we are excited to continue pushing the boundaries of what our team can achieve.</p>`
+        },
+        {
+            id: 'post10',
+            tag: 'Season Recap',
+            title: "Team 25667 Leviathan Robotics at the FTC Decode Season: A Journey of Growth",
+            date: 'Mar 9, 2026',
+            readTime: '1 min read',
+            image: 'https://images.unsplash.com/photo-1516715094483-75da7dee9758?auto=format&fit=crop&w=1200&h=630',
+            content: `<h3>Our Second Qualifier</h3>
+<p>Team 25667 participated in our second qualification tournament at Santa Clara High School during the FTC Decode Season. Our team achieved a commendable record of four wins and only one loss, demonstrating strong collaborative effort and dedication throughout the event.</p>
+<h3>Lessons from the Playoffs</h3>
+<p>Although our playoff experience fell short of expectations, the team gained valuable insights for strategy improvement. Every match taught us something new about our robot's capabilities and areas where we could refine our approach.</p>
+<h3>The Inspire Award</h3>
+<p>A significant highlight was receiving the prestigious Inspire Award, securing our entry into the North California Regional Championship. This award recognizes teams that embody the spirit of FIRST and demonstrate excellence across all aspects of the competition.</p>
+<h3>Looking Ahead</h3>
+<p>We believe that challenges are merely stepping stones towards greater achievements. Our team is committed to applying the lessons learned at the Regional Championship while continuing our development as competitors in robotics.</p>`
+        },
+        {
+            id: 'post9',
+            tag: 'Competition',
+            title: "Team 25667's Inspiring Journey at the San Jose Robotics Tournament",
+            date: 'Mar 8, 2026',
+            readTime: '1 min read',
+            image: 'https://images.unsplash.com/photo-1736134125235-217f468ce7cb?auto=format&fit=crop&w=1200&h=630',
+            content: `<h3>Our Inaugural Qualifier</h3>
+<p>Team 25667 participated in our inaugural qualification tournament at San Jose's Playspace. The team compiled a record of 2 wins and 3 losses during qualifications against competitive opponents, gaining valuable insights from each match about our robot's performance.</p>
+<h3>Strategic Alliance</h3>
+<p>In the playoff rounds, Team 25667 strategically partnered with Team 19819, the AstroBruins, to strengthen our collective capabilities. This alliance proved successful, as our combined effort advanced us to the finals.</p>
+<h3>The Innovate Award</h3>
+<p>Our partnership and innovative approach earned us the Innovate Award, recognizing our creative engineering solutions and collaborative spirit on the field.</p>
+<h3>Growth Beyond Competition</h3>
+<p>The tournament experience transcended mere competition. It was about growth, learning, and building relationships with fellow teams. We are proud of our accomplishments and committed to continued skill development while maintaining enthusiasm for future robotics competitions.</p>`
+        },
+        {
+            id: 'post7',
+            tag: 'Outreach',
+            title: "Leviathan Robotics: Engaging the Future of Innovation at the San Jose Tech Museum",
+            date: 'Feb 10, 2026',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=434,fit=crop/m6Lr6jMQxxSbKBrB/img_9557-AZxXjCgFKyMWyuxW.JPG',
+            content: `<h3>A Day at the Tech Museum</h3>
+<p>In August 2025, Leviathan Robotics had the incredible opportunity to showcase our work at the San Jose Tech Museum, one of the region's most vibrant innovation hubs. The event was designed to bring robotics closer to the public and inspire young minds to explore the world of STEM.</p>
+<h3>Interactive Fun-Play Experience</h3>
+<p>We displayed an interactive "fun-play" robot designed to educate visitors about robotics and programming through hands-on engagement. Our robot proved more than just a machine; it became a bridge between children's curiosity and their understanding of the future possibilities within the realm of robotics.</p>
+<h3>Inspiring the Next Generation</h3>
+<p>The experience focused on inspiring young learners, highlighting STEAM education principles by connecting theoretical robotics knowledge with practical demonstrations. Over 500 visitors engaged with our exhibit throughout the day, making it one of the crowd favorites.</p>
+<h3>Continuing Our Mission</h3>
+<p>Leviathan Robotics remains dedicated to expanding robotics outreach and education initiatives, aiming to equip future generations with the technological skills needed for innovation-driven careers ahead.</p>`
+        },
+        {
+            id: 'post6',
+            tag: 'Outreach',
+            title: "Leviathan Robotics at the Argonaut Elementary Science Fair: Inspiring Future Innovators",
+            date: 'Feb 10, 2026',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=418,fit=crop/m6Lr6jMQxxSbKBrB/img_8648-dsuVSEdqfM8zm97e.jpg',
+            content: `<h3>Partnering with Argonaut Elementary</h3>
+<p>In April 2025, Leviathan Robotics participated in the Argonaut Elementary School Science Fair. We showcased our robot and programming demonstrations to over 200 community members, with the goal of encouraging young students to pursue STEM fields.</p>
+<h3>Sharing FIRST Values</h3>
+<p>Throughout the event, we emphasized FIRST principles\u2014teamwork, gracious professionalism, and mutual respect. We believe that robotics is not merely about coding and machinery; it's about creativity and innovation that can change the world.</p>
+<h3>Hands-On Learning</h3>
+<p>The event highlighted how hands-on learning experiences can spark interest in technology among students. Children got to see the robot up close, ask questions, and understand how engineering principles come together in a real competition robot.</p>
+<h3>Looking Forward</h3>
+<p>The partnership with Argonaut Elementary was a tremendous success. We are committed to hosting additional educational events that promote STEM learning and collaborative innovation in the future.</p>`
+        },
+        {
+            id: 'post5',
+            tag: 'Award',
+            title: "Celebrating Our Success at the FTC Northern California Regionals",
+            date: 'Apr 20, 2025',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=512,fit=crop/m6Lr6jMQxxSbKBrB/img_170-Aq2WG0E2Z6H1EoR8.jpeg',
+            content: `<h3>Competing at Regionals</h3>
+<p>The Leviathan Robotics team is proud to share our experience competing at the FTC Northern California Regionals. The event brought together the best teams in the region, and we were honored to be among them after qualifying through our earlier competition success.</p>
+<h3>From Qualifiers to Eliminations</h3>
+<p>Our team progressed through the qualification matches with strong performances, demonstrating the improvements we had made to both our robot and our driving strategy. We advanced to the elimination rounds, where we faced even tougher competition.</p>
+<h3>Judge's Choice Award</h3>
+<p>A highlight of the event was receiving the Judge's Choice Award. This award honors teams that demonstrate exceptional qualities beyond just winning matches\u2014including creativity, teamwork, and engineering excellence. Our judges recognized our ability to communicate our design processes effectively and showcase our robot's capabilities.</p>
+<h3>Gratitude and Ambition</h3>
+<p>We express our deepest gratitude toward our mentors and supporters. This recognition motivates us to develop our robotics expertise further and pursue greater accomplishments in upcoming competitions.</p>`
+        },
+        {
+            id: 'post4',
+            tag: 'Scrimmage',
+            title: "Preparing for Regionals: A Successful Scrimmage with FTC Teams",
+            date: 'Feb 20, 2025',
+            readTime: '1 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1440,h=756,fit=crop,f=jpeg/m6Lr6jMQxxSbKBrB/generated/generated-mk35eqJkkaf1ZDZw.png',
+            content: `<h3>Hosting a Practice Competition</h3>
+<p>Leviathan Robotics hosted a practice competition at our facility, welcoming three visiting teams: Cheesy Bytes, Kuriosity Robotics, and Quixilver. This gathering served as crucial preparation for the upcoming regional championships.</p>
+<h3>Learning from Each Other</h3>
+<p>The diversity of skills among the participating teams added a rich layer of learning opportunities. Teams exchanged tactics and insights constructively, helping everyone improve their strategies and robot performance before the big event.</p>
+<h3>Building Community</h3>
+<p>Such scrimmages are invaluable for robotics teams to evaluate performance in competitive conditions while building camaraderie. The collaborative spirit demonstrated at this event reflects the best of the FTC community.</p>
+<h3>Ready for Regionals</h3>
+<p>We express our gratitude to the visiting teams and feel optimistic about our readiness for the upcoming regional competition following this successful practice event.</p>`
+        },
+        {
+            id: 'post3',
+            tag: 'Competition',
+            title: "Victory at the Playspace 2 FTC Competition: A Journey to Regionals",
+            date: 'Dec 8, 2024',
+            readTime: '1 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,h=2561,fit=crop/m6Lr6jMQxxSbKBrB/img_6407-A85EqnK1eKU7Z4Bd.jpg',
+            content: `<h3>Dominating Qualifications</h3>
+<p>At the Playspace 2 FTC Competition, our team achieved an impressive undefeated record of 6-0 in qualifying rounds. We credit this success to hours dedicated to refining our robot's design, optimization, and programming. Our navigation algorithms enhanced efficiency and reduced errors significantly.</p>
+<h3>Playoff Performance</h3>
+<p>In the playoff round, we secured a strong 3-1 record against competitive opponents. Strategy played a crucial role\u2014we coordinated closely with our alliance partners, dividing field responsibilities to maximize performance and avoid interference.</p>
+<h3>Winning Alliance Captain</h3>
+<p>Our outstanding performance earned us the Winning Alliance Captain award, a recognition of our leadership and competitive excellence throughout the tournament.</p>
+<h3>Qualified for Regionals</h3>
+<p>This victory qualified us for the regional competition\u2014a significant achievement offering opportunities to face elite teams and advance our competitive abilities. We look forward to competing at regionals while maintaining gracious professionalism throughout our journey.</p>`
+        },
+        {
+            id: 'post-cad',
+            tag: 'Education',
+            title: "Empowering Young Minds: Multiple CAD Classes for Children",
+            date: 'Nov 14, 2024',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=326,fit=crop/m6Lr6jMQxxSbKBrB/may_05_2024_03-mp8qGLoB53Twoxoo.jpg',
+            content: `<h3>Introducing CAD to Young Learners</h3>
+<p>Leviathan Robotics launched an initiative to introduce Computer-Aided Design fundamentals to children. The program included two tiers of instruction designed to meet students at their level and challenge them to grow.</p>
+<h3>Introductory Classes</h3>
+<p>Our introductory classes emphasized hands-on learning and creativity, where students progressed from drafting simple shapes to designing basic models. The focus was on building technological confidence while fostering innovation and creative thinking.</p>
+<h3>Advanced Sessions with Stanford</h3>
+<p>The advanced lecture series featured a Stanford University professor discussing design efficiency concepts. Students learned how CAD techniques can enhance product design by focusing on efficiency and sustainability, exposing them to real-world applications of their developing skills.</p>
+<h3>Building Future Engineers</h3>
+<p>We believe such educational programs are instrumental in developing the next generation of engineers and designers prepared for our technology-dependent future.</p>`
+        },
+        {
+            id: 'post-global',
+            tag: 'Global',
+            title: "Global Outreach in Robotics: Inspiring the New Generation",
+            date: 'Jul 28, 2024',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=434,fit=crop/m6Lr6jMQxxSbKBrB/summer-trip-outreach_02-AzG3O0rW4KIylgRL.jpg',
+            content: `<h3>International Initiative</h3>
+<p>Leviathan Robotics embarked on an international robotics education initiative spanning the Caribbean, Japan, Taiwan, China, and Turkey. Our team members distributed educational materials and engaged communities to encourage participation in FIRST programs worldwide.</p>
+<h3>The Power of Robotics Education</h3>
+<p>Our outreach emphasized how robotics develops problem-solving, critical thinking, and teamwork across various age groups. The initiative showcased robotics as both technical and creative education, with participants ranging from children building basic robots to teenagers tackling complex programming challenges.</p>
+<h3>Building Sustainable Partnerships</h3>
+<p>We prioritized establishing sustainable partnerships with local institutions and mentors rather than creating temporary awareness campaigns. Strong interest in science and technology within Asian communities proved particularly promising for developing long-term robotics programs.</p>
+<h3>A Global Mission</h3>
+<p>We are grateful for the positive reception and reaffirm our commitment to fostering the next generation of technology innovators through global connections and continued robotics education advocacy.</p>`
+        },
+        {
+            id: 'post2',
+            tag: 'Community',
+            title: "Empowering Communities Through FIRST Robotics Programs",
+            date: 'Jul 17, 2024',
+            readTime: '1 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=434,fit=crop/m6Lr6jMQxxSbKBrB/img_1207-Aq2qL4eyZKtDGnX3.png',
+            content: `<h3>Introducing FIRST Programs</h3>
+<p>Leviathan Robotics organized a community presentation to introduce FIRST Robotics Programs and their role in advancing STEM education. FLL is tailored for elementary and middle school students, emphasizing teamwork and problem-solving through robot building and programming, while FRC serves high school students with more advanced engineering challenges.</p>
+<h3>Showcasing Our Experiences</h3>
+<p>The presentation featured members from both FLL and FRC teams who shared their experiences and achievements. Participants learned firsthand how robotics develops both technical competencies and interpersonal abilities like collaboration and leadership.</p>
+<h3>Community Engagement</h3>
+<p>This initiative demonstrates our commitment to enriching our community through engaging learning experiences. We invited community members\u2014particularly parents and STEM-interested students\u2014to explore robotics and engineering careers through these accessible programs.</p>`
+        },
+        {
+            id: 'post1',
+            tag: 'Summer Camp',
+            title: "Empowering Young Minds: Leviathan Robotics Summer Camp at Argonaut Elementary",
+            date: 'Jul 16, 2024',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=434,fit=crop/m6Lr6jMQxxSbKBrB/7f046cf9-2c91-4d1d-8cd3-1b720d97b8a2_1_105_c-YanqOvLM53cjDQQ6.jpeg',
+            content: `<h3>Camp at Argonaut Elementary</h3>
+<p>Leviathan Robotics conducted an exciting outreach program at Argonaut Elementary where students explored robotics through hands-on activities. The camp featured Lego building sessions where participants constructed components for FLL game boards, developing problem-solving abilities while engaging with the technology.</p>
+<h3>Learning Robotics Fundamentals</h3>
+<p>The program introduced youngsters to fundamental robotics concepts, including basic components, programming, and the principles behind robotic movement. Educational kits and tools supported these lessons, establishing a core understanding in the field.</p>
+<h3>Introducing FTC</h3>
+<p>A significant component involved presenting the FIRST Tech Challenge (FTC) to attendees. By showcasing this competitive platform, we aimed to encourage future participation and highlight how FTC inspires and engages students in STEM fields.</p>
+<h3>Expanding Our Reach</h3>
+<p>The initiative emphasized collaboration and innovation among participants. We are committed to expanding similar outreach efforts to additional schools and nurturing interest in robotics and engineering among younger generations.</p>`
+        },
+        {
+            id: 'post-meet',
+            tag: 'Team',
+            title: "Meet the FTC Team: Leviathan Robotics",
+            date: 'Jun 12, 2024',
+            readTime: '2 min read',
+            image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1024,h=434,fit=crop/m6Lr6jMQxxSbKBrB/img_6314-YleqDV6L80CVaKED.jpg',
+            content: `<h3>Our Founding Members</h3>
+<p>Leviathan Robotics is a First Tech Challenge (FTC) team composed of dedicated students who share a passion for robotics, engineering, and innovation. Meet the team members who make it all happen.</p>
+<h3>The Team</h3>
+<p><strong>Evan</strong> excels in coding and programming, leading autonomous robot operations while coordinating team sessions. <strong>Ethan</strong> handles communication, presenting projects to competition judges and explaining technical design processes.</p>
+<p><strong>Vishak</strong> manages hardware assembly, makes mechanical design decisions, and pilots the robot during competitions. <strong>Ambrose</strong> serves as CAD specialist, designing robots in Onshape and creating custom 3D-printed components.</p>
+<p><strong>Luca</strong> contributes versatile skills across CAD, hardware, and communication, specializing in assembly work.</p>
+<h3>United by Robotics</h3>
+<p>We believe that teamwork and dedication are essential qualities that contribute to success in robotics competitions. Participating in FTC has developed our technical expertise alongside crucial life competencies including communication, time management, and collaboration. We look forward to continued growth through future competitions.</p>`
+        }
+    ];
+
+    // Page navigation
+    let currentPage = 'home';
+    function showPage(pageName) {
+        // Don't re-navigate to the same page
+        if (pageName === currentPage) return;
+        currentPage = pageName;
+
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+        // Show target page
+        const target = document.getElementById('page-' + pageName);
+        if (target) {
+            target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Re-trigger reveal animations
+            target.querySelectorAll('.reveal').forEach(el => {
+                el.classList.remove('visible');
+                void el.offsetWidth;
+                observer.observe(el);
+            });
+        }
+
+        // Update nav active state
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.classList.toggle('active', a.dataset.page === pageName);
+        });
+
+        // Close mobile menu
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+    }
+
+    // Nav link clicks
+    document.querySelectorAll('[data-page]').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(el.dataset.page);
+        });
+    });
+
+    // External links in nav (Join Leviathan) - don't interfere
+    document.querySelectorAll('.nav-links a[href]').forEach(el => {
+        if (!el.dataset.page) {
+            el.addEventListener('click', (e) => {
+                // Close mobile menu
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        }
+    });
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        navLinks.classList.toggle('open');
+    });
+
+    // Scroll reveal (Intersection Observer)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Image Carousel
+    let carouselIndex = 0;
+    const track = document.getElementById('campCarouselTrack');
+    const slides = track ? track.children : [];
+    const dotsContainer = document.getElementById('campCarouselDots');
+    let autoSlideInterval;
+
+    function initCarousel() {
+        if (!dotsContainer || slides.length === 0) return;
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < slides.length; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+        startAutoSlide();
+    }
+
+    function goToSlide(index) {
+        carouselIndex = index;
+        if (carouselIndex < 0) carouselIndex = slides.length - 1;
+        if (carouselIndex >= slides.length) carouselIndex = 0;
+        track.style.transform = `translateX(-${carouselIndex * 100}%)`;
+        const dots = dotsContainer.querySelectorAll('.carousel-dot');
+        dots.forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
+    }
+
+    function moveCarousel(dir) {
+        goToSlide(carouselIndex + dir);
+        resetAutoSlide();
+    }
+
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => goToSlide(carouselIndex + 1), 4000);
+    }
+
+    function resetAutoSlide() {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    }
+
+    initCarousel();
+
+    // Blog Modal
+    function openBlogPost(index) {
+        const post = blogPosts[index];
+        if (!post) return;
+        document.getElementById('blogModalHero').innerHTML = `<img src="${post.image}" alt="${post.title}">`;
+        document.getElementById('blogModalMeta').innerHTML = `
+            <span class="card-tag">${post.tag}</span>
+            <span>${post.date}</span>
+            <span>&bull;</span>
+            <span>${post.readTime}</span>
+        `;
+        document.getElementById('blogModalTitle').textContent = post.title;
+        document.getElementById('blogModalContent').innerHTML = post.content;
+        document.getElementById('blogModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBlogModal() {
+        document.getElementById('blogModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('blogModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('blogModal')) closeBlogModal();
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeBlogModal();
+    });
+</script>
+
+</body>
+</html>
