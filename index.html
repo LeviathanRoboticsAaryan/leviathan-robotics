@@ -313,20 +313,13 @@
             padding: 2rem 0;
         }
         .sponsor-logo {
-            height: 44px; width: auto; max-width: 140px;
+            height: 44px; width: auto; max-width: 150px;
             object-fit: contain;
-            opacity: 0.55; filter: grayscale(1) brightness(3);
-            mix-blend-mode: screen;
+            opacity: 0.65;
+            filter: brightness(1.1);
             transition: opacity 0.3s, filter 0.3s;
         }
-        .sponsor-logo:hover { opacity: 1; filter: grayscale(0) brightness(1); }
-        .sponsor-logo-invert {
-            height: 44px; width: auto; max-width: 140px;
-            object-fit: contain;
-            opacity: 0.55; filter: invert(1) grayscale(1) brightness(1.5);
-            transition: opacity 0.3s, filter 0.3s;
-        }
-        .sponsor-logo-invert:hover { opacity: 1; filter: invert(0) grayscale(0); }
+        .sponsor-logo:hover { opacity: 1; filter: brightness(1.2); }
 
         /* === TESTIMONIALS === */
         .testimonials-grid {
@@ -659,22 +652,14 @@
             </div>
 
             <div class="sponsors-grid reveal">
-                <!-- Apple (SVG - original image was all black) -->
-                <svg class="sponsor-logo" style="mix-blend-mode:normal;opacity:0.55;filter:brightness(3);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000" height="44" width="auto"><path fill="currentColor" d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.3-81.8-105.4-209.6-105.4-330.8 0-194.3 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-53.7 83.6-53.7 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.4 0 103-30.6 138.1-71.4z"/></svg>
-                <!-- Meta - blue on black, screen blend -->
-                <img src="images/page1_img8.jpg" alt="Meta" class="sponsor-logo">
-                <!-- ServiceNow - dark bg, screen blend -->
-                <img src="images/page1_img4.jpg" alt="ServiceNow" class="sponsor-logo">
-                <!-- Intuitive - black logo on black bg, invert to white -->
-                <img src="images/page1_img1.jpg" alt="Intuitive" class="sponsor-logo-invert">
-                <!-- Western Digital - colored logo, screen blend -->
-                <img src="images/page1_img2.jpg" alt="Western Digital" class="sponsor-logo">
-                <!-- Palo Alto Networks - dark bg, screen blend -->
-                <img src="images/page1_img3.jpg" alt="Palo Alto Networks" class="sponsor-logo">
-                <!-- goBILDA - light bg logo, invert -->
-                <img src="images/page1_img5.jpg" alt="goBILDA" class="sponsor-logo-invert">
-                <!-- FIRST Tech Challenge - light bg, invert -->
-                <img src="images/page1_img6.jpg" alt="FIRST Tech Challenge" class="sponsor-logo-invert" style="height:38px;">
+                <svg class="sponsor-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000" style="height:40px;width:auto;color:#fff;"><path fill="currentColor" d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.3-81.8-105.4-209.6-105.4-330.8 0-194.3 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-53.7 83.6-53.7 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.4 0 103-30.6 138.1-71.4z"/></svg>
+                <img src="images/sponsor_meta.png" alt="Meta" class="sponsor-logo">
+                <img src="images/sponsor_servicenow.png" alt="ServiceNow" class="sponsor-logo">
+                <img src="images/sponsor_intuitive.png" alt="Intuitive" class="sponsor-logo">
+                <img src="images/sponsor_wd.png" alt="Western Digital" class="sponsor-logo">
+                <img src="images/sponsor_palotalto.png" alt="Palo Alto Networks" class="sponsor-logo">
+                <img src="images/sponsor_gobilda.png" alt="goBILDA" class="sponsor-logo">
+                <img src="images/sponsor_first.png" alt="FIRST Tech Challenge" class="sponsor-logo" style="height:38px;">
             </div>
         </div>
     </section>
