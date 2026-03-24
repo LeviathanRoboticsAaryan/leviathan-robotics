@@ -249,7 +249,7 @@
             display: flex; gap: 2rem; position: relative; margin-top: 4rem;
         }
         .hw-panels {
-            flex: 1; min-width: 0;
+            flex: 0.8; min-width: 0;
         }
         .hw-panel {
             min-height: 85vh; padding: 3rem 0;
@@ -275,16 +275,15 @@
             background: var(--accent); transform: translateY(-50%);
         }
         .hw-video-wrap {
-            flex: 1; min-width: 0; position: sticky;
-            top: 100px; height: calc(100vh - 150px);
+            flex: 1.2; min-width: 0; position: sticky;
+            top: 80px; height: calc(100vh - 120px);
             display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border-radius: 12px;
         }
         .hw-video-wrap video {
             width: 100%; height: 100%; object-fit: contain;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .hw-video-wrap.zooming video {
-            transform: scale(0.75);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: center center;
         }
         .subsystem h3 {
             font-size: 1.6rem; font-weight: 600; margin-bottom: 0.75rem;
@@ -784,7 +783,7 @@
             <div class="hw-showcase">
                 <div class="hw-panels">
                     <!-- Drivetrain -->
-                    <div class="hw-panel active" data-time="0.35">
+                    <div class="hw-panel active" data-time="1.0" data-scale="1.8" data-tx="0" data-ty="10">
                         <div class="card-tag">Drivetrain</div>
                         <h3>Vertical Drivetrain</h3>
                         <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
@@ -806,7 +805,7 @@
                     </div>
 
                     <!-- Spindexer -->
-                    <div class="hw-panel" data-time="2.0">
+                    <div class="hw-panel" data-time="0.0" data-scale="2.8" data-tx="0" data-ty="-5">
                         <div class="card-tag">Sorting</div>
                         <h3>Spindexer</h3>
                         <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
@@ -828,7 +827,7 @@
                     </div>
 
                     <!-- Turret -->
-                    <div class="hw-panel" data-time="2.5">
+                    <div class="hw-panel" data-time="2.0" data-scale="3.0" data-tx="5" data-ty="-15">
                         <div class="card-tag">Aiming</div>
                         <h3>Turret</h3>
                         <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
@@ -850,7 +849,7 @@
                     </div>
 
                     <!-- Flywheel -->
-                    <div class="hw-panel" data-time="2.83">
+                    <div class="hw-panel" data-time="2.67" data-scale="2.8" data-tx="-5" data-ty="-15">
                         <div class="card-tag">Shooting</div>
                         <h3>Flywheel</h3>
                         <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
@@ -863,7 +862,7 @@
                     </div>
 
                     <!-- Intake -->
-                    <div class="hw-panel" data-time="0.0">
+                    <div class="hw-panel" data-time="0.0" data-scale="2.8" data-tx="0" data-ty="20">
                         <div class="card-tag">Collection</div>
                         <h3>Intake</h3>
                         <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
@@ -1590,11 +1589,19 @@
         if (!hwVideo || !panels.length) return;
 
         let currentPanel = 0;
-        const videoDuration = 4.17; // total video duration in seconds
+        const videoDuration = 4.17;
 
-        // Set initial frame
+        function applyTransform(panel) {
+            var s = parseFloat(panel.dataset.scale) || 1;
+            var tx = parseFloat(panel.dataset.tx) || 0;
+            var ty = parseFloat(panel.dataset.ty) || 0;
+            hwVideo.style.transform = 'scale(' + s + ') translate(' + tx + '%, ' + ty + '%)';
+        }
+
+        // Set initial frame and transform
         hwVideo.addEventListener('loadedmetadata', function() {
             hwVideo.currentTime = parseFloat(panels[0].dataset.time) || 0;
+            applyTransform(panels[0]);
         });
 
         // Smooth seek animation
@@ -1602,19 +1609,15 @@
         let seeking = false;
         function smoothSeek() {
             if (!seeking) return;
-            const diff = seekTarget - hwVideo.currentTime;
-            // Handle wrapping around (e.g., going from 2.83s to 0.0s)
+            var diff = seekTarget - hwVideo.currentTime;
             if (Math.abs(diff) > videoDuration / 2) {
-                // Jump directly for wrap-around cases
                 hwVideo.currentTime = seekTarget;
                 seeking = false;
-                hwWrap.classList.remove('zooming');
                 return;
             }
             if (Math.abs(diff) < 0.03) {
                 hwVideo.currentTime = seekTarget;
                 seeking = false;
-                hwWrap.classList.remove('zooming');
                 return;
             }
             hwVideo.currentTime += diff * 0.12;
@@ -1627,18 +1630,27 @@
             currentPanel = index;
             panels[currentPanel].classList.add('active');
 
-            // Zoom out, seek, zoom back in
-            hwWrap.classList.add('zooming');
-            seekTarget = parseFloat(panels[index].dataset.time) || 0;
-            seeking = true;
-            requestAnimationFrame(smoothSeek);
+            // First zoom out to full view
+            hwVideo.style.transform = 'scale(1) translate(0%, 0%)';
+
+            // After zoom-out transition, seek video and zoom into new target
+            setTimeout(function() {
+                seekTarget = parseFloat(panels[index].dataset.time) || 0;
+                seeking = true;
+                requestAnimationFrame(smoothSeek);
+
+                // Apply zoom-in after a short delay for the rotation
+                setTimeout(function() {
+                    applyTransform(panels[index]);
+                }, 400);
+            }, 500);
         }
 
-        // Intersection Observer to detect which panel is in view
-        const observer = new IntersectionObserver(function(entries) {
+        // Intersection Observer
+        var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
-                    const idx = Array.from(panels).indexOf(entry.target);
+                    var idx = Array.from(panels).indexOf(entry.target);
                     if (idx !== -1) goToPanel(idx);
                 }
             });
