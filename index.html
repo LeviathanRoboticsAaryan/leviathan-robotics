@@ -243,49 +243,6 @@
             transition: transform 0.5s ease;
         }
         .subsystem:hover .subsystem-img img { transform: scale(1.03); }
-
-        /* === HARDWARE SHOWCASE (scroll-controlled video) === */
-        .hw-showcase {
-            display: flex; gap: 2rem; position: relative; margin-top: 4rem;
-        }
-        .hw-panels {
-            flex: 1; min-width: 0;
-        }
-        .hw-panel {
-            min-height: 85vh; padding: 3rem 0;
-            display: flex; flex-direction: column; justify-content: center;
-            opacity: 0.3; transition: opacity 0.5s ease;
-        }
-        .hw-panel.active { opacity: 1; }
-        .hw-panel:last-child { min-height: 60vh; }
-        .hw-panel .card-tag { margin-bottom: 0.5rem; }
-        .hw-panel h3 {
-            font-size: 1.6rem; font-weight: 600; margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-        }
-        .hw-panel p { color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem; margin-bottom: 1rem; }
-        .hw-panel ul { list-style: none; padding: 0; }
-        .hw-panel ul li {
-            padding: 0.4rem 0; color: var(--text-secondary); font-size: 0.9rem;
-            padding-left: 1.2rem; position: relative;
-        }
-        .hw-panel ul li::before {
-            content: ''; position: absolute; left: 0; top: 50%;
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--accent); transform: translateY(-50%);
-        }
-        .hw-video-wrap {
-            flex: 1; min-width: 0; position: sticky;
-            top: 100px; height: calc(100vh - 150px);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .hw-video-wrap video {
-            width: 100%; height: 100%; object-fit: contain;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .hw-video-wrap.zooming video {
-            transform: scale(0.75);
-        }
         .subsystem h3 {
             font-size: 1.6rem; font-weight: 600; margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
@@ -598,9 +555,6 @@
             .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
             .subsystem { grid-template-columns: 1fr; }
             .subsystem:nth-child(even) .subsystem-img { order: 0; }
-            .hw-showcase { flex-direction: column; }
-            .hw-video-wrap { position: relative; top: 0; height: 300px; order: -1; }
-            .hw-panel { min-height: auto; padding: 2rem 0; }
             .process-steps { grid-template-columns: 1fr; gap: 0.5rem; }
             .process-step::before, .process-step::after { display: none; }
             .ps-block { flex-direction: column; }
@@ -780,114 +734,130 @@
                 </div>
             </div>
 
-            <!-- Scroll-controlled subsystem showcase -->
-            <div class="hw-showcase">
-                <div class="hw-panels">
-                    <!-- Drivetrain -->
-                    <div class="hw-panel active" data-time="0.35">
-                        <div class="card-tag">Drivetrain</div>
-                        <h3>Vertical Drivetrain</h3>
-                        <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
-                        <ul>
-                            <li>Bevel-gear and vertical-motor design for seamless spindexer integration</li>
-                            <li>Two odometry pods at center for optimal localization</li>
-                            <li>Compact form factor with base-level spindexer</li>
-                        </ul>
-                        <div class="ps-block">
-                            <div class="ps-item problem">
-                                <div class="ps-label">Tradeoff</div>
-                                <p>Vertical motors make turret integration more difficult</p>
-                            </div>
-                            <div class="ps-item solution">
-                                <div class="ps-label">Solution</div>
-                                <p>Developed innovative inverted turret layout to recover critical space</p>
-                            </div>
+            <!-- Drivetrain -->
+            <div class="subsystem reveal" style="margin-top: 4rem;">
+                <div>
+                    <div class="card-tag">Drivetrain</div>
+                    <h3>Vertical Drivetrain</h3>
+                    <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
+                    <ul>
+                        <li>Bevel-gear and vertical-motor design for seamless spindexer integration</li>
+                        <li>Two odometry pods at center for optimal localization</li>
+                        <li>Compact form factor with base-level spindexer</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Tradeoff</div>
+                            <p>Vertical motors make turret integration more difficult</p>
                         </div>
-                    </div>
-
-                    <!-- Spindexer -->
-                    <div class="hw-panel" data-time="2.0">
-                        <div class="card-tag">Sorting</div>
-                        <h3>Spindexer</h3>
-                        <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
-                        <ul>
-                            <li>Solid, smooth interior walls to reduce snag points</li>
-                            <li>Enlarged spinner with extended arms for maximum grip</li>
-                            <li>Mounts both Control Hub and Expansion Hub along its side</li>
-                        </ul>
-                        <div class="ps-block">
-                            <div class="ps-item problem">
-                                <div class="ps-label">Problem</div>
-                                <p>Artifacts got stuck on standoffs; spinner had minimal contact</p>
-                            </div>
-                            <div class="ps-item solution">
-                                <div class="ps-label">Solution</div>
-                                <p>Replaced standoffs with solid walls; enlarged spinner diameter</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Turret -->
-                    <div class="hw-panel" data-time="2.5">
-                        <div class="card-tag">Aiming</div>
-                        <h3>Turret</h3>
-                        <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
-                        <ul>
-                            <li>Metal ball bearings for 4x faster rotation vs. 3D-printed version</li>
-                            <li>Modularized from flywheel for faster iteration cycles</li>
-                            <li>Innovative attachment points for stability and fast prototyping</li>
-                        </ul>
-                        <div class="ps-block">
-                            <div class="ps-item problem">
-                                <div class="ps-label">Problem</div>
-                                <p>3D-printed turret was slow &mdash; couldn't use ball bearings</p>
-                            </div>
-                            <div class="ps-item solution">
-                                <div class="ps-label">Solution</div>
-                                <p>Replaced with manufactured turntable bearing turret &mdash; 4x faster</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Flywheel -->
-                    <div class="hw-panel" data-time="2.83">
-                        <div class="card-tag">Shooting</div>
-                        <h3>Flywheel</h3>
-                        <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
-                        <ul>
-                            <li>Calculates distance to goal using camera angle data</li>
-                            <li>Regression model maps speed to shooting distance</li>
-                            <li>Tungsten putty increases inertia for longer shots</li>
-                            <li>Compatible with Limelight 3a and turret system</li>
-                        </ul>
-                    </div>
-
-                    <!-- Intake -->
-                    <div class="hw-panel" data-time="0.0">
-                        <div class="card-tag">Collection</div>
-                        <h3>Intake</h3>
-                        <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
-                        <ul>
-                            <li>Rubber band wheels provide consistent grip and pull on artifacts</li>
-                            <li>Enlarged funnel ramp design to absorb high-speed impacts</li>
-                            <li>Sandpaper-enhanced surfaces for additional traction</li>
-                            <li>Protective funnel guards against wall and robot collisions</li>
-                        </ul>
-                        <div class="ps-block">
-                            <div class="ps-item problem">
-                                <div class="ps-label">Lesson Learned</div>
-                                <p>Control Hub mounted at 45&deg; inside spindexer caused IMU misalignment, breaking Road Runner odometry</p>
-                            </div>
-                            <div class="ps-item solution">
-                                <div class="ps-label">Fix</div>
-                                <p>Relocated Control Hub to vertical mount on top of spindexer, restoring proper odometry</p>
-                            </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Developed innovative inverted turret layout to recover critical space</p>
                         </div>
                     </div>
                 </div>
+                <div class="subsystem-img">
+                    <img src="images/page9_img3.jpg" alt="Drivetrain CAD">
+                </div>
+            </div>
 
-                <div class="hw-video-wrap" id="hwVideoWrap">
-                    <video id="hwVideo" src="images/robot-spin.mp4" muted playsinline preload="auto"></video>
+            <!-- Spindexer -->
+            <div class="subsystem reveal">
+                <div class="subsystem-img">
+                    <img src="images/page10_img3.jpg" alt="Spindexer detail">
+                </div>
+                <div>
+                    <div class="card-tag">Sorting</div>
+                    <h3>Spindexer</h3>
+                    <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
+                    <ul>
+                        <li>Solid, smooth interior walls to reduce snag points</li>
+                        <li>Enlarged spinner with extended arms for maximum grip</li>
+                        <li>Mounts both Control Hub and Expansion Hub along its side</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Problem</div>
+                            <p>Artifacts got stuck on standoffs; spinner had minimal contact</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Replaced standoffs with solid walls; enlarged spinner diameter</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Turret -->
+            <div class="subsystem reveal">
+                <div>
+                    <div class="card-tag">Aiming</div>
+                    <h3>Turret</h3>
+                    <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
+                    <ul>
+                        <li>Metal ball bearings for 4x faster rotation vs. 3D-printed version</li>
+                        <li>Modularized from flywheel for faster iteration cycles</li>
+                        <li>Innovative attachment points for stability and fast prototyping</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Problem</div>
+                            <p>3D-printed turret was slow &mdash; couldn't use ball bearings</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Solution</div>
+                            <p>Replaced with manufactured turntable bearing turret &mdash; 4x faster</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page11_img3.jpg" alt="Turret design">
+                </div>
+            </div>
+
+            <!-- Flywheel -->
+            <div class="subsystem reveal">
+                <div class="subsystem-img">
+                    <img src="images/page12_img2.jpg" alt="Flywheel system">
+                </div>
+                <div>
+                    <div class="card-tag">Shooting</div>
+                    <h3>Flywheel</h3>
+                    <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
+                    <ul>
+                        <li>Calculates distance to goal using camera angle data</li>
+                        <li>Regression model maps speed to shooting distance</li>
+                        <li>Tungsten putty increases inertia for longer shots</li>
+                        <li>Compatible with Limelight 3a and turret system</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Intake -->
+            <div class="subsystem reveal">
+                <div>
+                    <div class="card-tag">Collection</div>
+                    <h3>Intake</h3>
+                    <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
+                    <ul>
+                        <li>Rubber band wheels provide consistent grip and pull on artifacts</li>
+                        <li>Enlarged funnel ramp design to absorb high-speed impacts</li>
+                        <li>Sandpaper-enhanced surfaces for additional traction</li>
+                        <li>Protective funnel guards against wall and robot collisions</li>
+                    </ul>
+                    <div class="ps-block">
+                        <div class="ps-item problem">
+                            <div class="ps-label">Lesson Learned</div>
+                            <p>Control Hub mounted at 45&deg; inside spindexer caused IMU misalignment, breaking Road Runner odometry</p>
+                        </div>
+                        <div class="ps-item solution">
+                            <div class="ps-label">Fix</div>
+                            <p>Relocated Control Hub to vertical mount on top of spindexer, restoring proper odometry</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/page13_img5.jpg" alt="Intake system with rubber band wheels">
                 </div>
             </div>
 
@@ -1580,74 +1550,6 @@
             animFrame = requestAnimationFrame(smoothUpdate);
         }
         smoothUpdate();
-    })();
-
-    // Hardware showcase scroll-controlled video
-    (function() {
-        const hwVideo = document.getElementById('hwVideo');
-        const hwWrap = document.getElementById('hwVideoWrap');
-        const panels = document.querySelectorAll('.hw-panel');
-        if (!hwVideo || !panels.length) return;
-
-        let currentPanel = 0;
-        const videoDuration = 4.17; // total video duration in seconds
-
-        // Set initial frame
-        hwVideo.addEventListener('loadedmetadata', function() {
-            hwVideo.currentTime = parseFloat(panels[0].dataset.time) || 0;
-        });
-
-        // Smooth seek animation
-        let seekTarget = 0;
-        let seeking = false;
-        function smoothSeek() {
-            if (!seeking) return;
-            const diff = seekTarget - hwVideo.currentTime;
-            // Handle wrapping around (e.g., going from 2.83s to 0.0s)
-            if (Math.abs(diff) > videoDuration / 2) {
-                // Jump directly for wrap-around cases
-                hwVideo.currentTime = seekTarget;
-                seeking = false;
-                hwWrap.classList.remove('zooming');
-                return;
-            }
-            if (Math.abs(diff) < 0.03) {
-                hwVideo.currentTime = seekTarget;
-                seeking = false;
-                hwWrap.classList.remove('zooming');
-                return;
-            }
-            hwVideo.currentTime += diff * 0.12;
-            requestAnimationFrame(smoothSeek);
-        }
-
-        function goToPanel(index) {
-            if (index === currentPanel) return;
-            panels[currentPanel].classList.remove('active');
-            currentPanel = index;
-            panels[currentPanel].classList.add('active');
-
-            // Zoom out, seek, zoom back in
-            hwWrap.classList.add('zooming');
-            seekTarget = parseFloat(panels[index].dataset.time) || 0;
-            seeking = true;
-            requestAnimationFrame(smoothSeek);
-        }
-
-        // Intersection Observer to detect which panel is in view
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
-                    const idx = Array.from(panels).indexOf(entry.target);
-                    if (idx !== -1) goToPanel(idx);
-                }
-            });
-        }, {
-            threshold: [0.4, 0.6],
-            rootMargin: '-20% 0px -20% 0px'
-        });
-
-        panels.forEach(function(panel) { observer.observe(panel); });
     })();
 
     // Blog post data
