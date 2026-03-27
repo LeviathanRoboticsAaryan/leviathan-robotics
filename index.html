@@ -162,14 +162,29 @@
         .section-label {
             font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
             color: var(--accent); margin-bottom: 0.75rem; font-weight: 500;
+            text-align: center;
         }
         .section-title {
             font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
             letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem;
+            text-align: center;
         }
         .section-subtitle {
             font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;
             line-height: 1.6; margin-bottom: 3rem;
+            text-align: center; margin-left: auto; margin-right: auto;
+        }
+
+        .register-btn {
+            display: inline-block; font-size: 1.1rem; padding: 0.8rem 2.5rem;
+            background: linear-gradient(135deg, #38bdf8 0%, #38bdf8 100%); color: #000; border-radius: 8px;
+            text-decoration: none; font-weight: 600;
+            background-size: 200% 200%; background-position: left center;
+            transition: background-position 0.3s ease;
+        }
+        .register-btn:hover {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            background-size: 200% 200%; background-position: right center;
         }
 
         /* === STATS BAR === */
@@ -198,6 +213,9 @@
             display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
         }
+        .card-grid-centered .card-body { text-align: center; }
+        .card-grid-centered .card-tag { margin-left: auto; margin-right: auto; }
+        .card-grid-centered .card-body p { max-width: 500px; margin-left: auto; margin-right: auto; }
         .card {
             background: var(--bg-card); border-radius: var(--radius);
             border: 1px solid var(--border); overflow: hidden;
@@ -278,7 +296,7 @@
         .ps-item p { color: var(--text-secondary); line-height: 1.5; margin: 0; }
 
         /* === TIMELINE === */
-        .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
+        .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto; }
         .timeline::before {
             content: ''; position: absolute; left: 0; top: 0; bottom: 0;
             width: 2px; background: linear-gradient(to bottom, var(--accent), rgba(56,189,248,0.1));
@@ -327,6 +345,10 @@
         .testimonials-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem; margin-top: 2rem;
+        }
+        #page-summercamp .testimonials-grid,
+        #page-outreach .testimonials-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
         .testimonial {
             padding: 1.5rem; border-radius: var(--radius);
@@ -531,6 +553,24 @@
         }
         .blog-modal-back:hover { opacity: 0.7; }
 
+        /* === SEASON TABS === */
+        .season-tabs {
+            display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem;
+        }
+        .season-tab {
+            padding: 0.6rem 1.8rem; border-radius: 8px; border: 1px solid var(--border);
+            background: transparent; color: var(--text-secondary); font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: -0.01em;
+        }
+        .season-tab:hover { border-color: var(--accent); color: var(--text-primary); }
+        .season-tab.active {
+            background: var(--accent); color: #000; border-color: var(--accent);
+        }
+        .season-content { display: none; }
+        .season-content.active { display: block; }
+
         /* === FOOTER === */
         footer {
             padding: 3rem 2rem; text-align: center;
@@ -569,11 +609,12 @@
         <div class="nav-brand" data-page="home"><img src="images/logo_transparent.png" alt="Leviathan Logo"><span>25667</span> Leviathan Robotics</div>
         <ul class="nav-links" id="navLinks">
             <li><a data-page="home" class="active">Home</a></li>
-            <li><a data-page="hardware">Hardware</a></li>
-            <li><a data-page="software">Software</a></li>
+            <li><a data-page="robot">Our Robot</a></li>
             <li><a data-page="outreach">Outreach</a></li>
+            <li><a data-page="achievements">Achievements</a></li>
             <li><a data-page="blog">Blog</a></li>
             <li><a data-page="summercamp">Summer Camp</a></li>
+            <li><a data-page="sustainprint">SustainPrint&trade;</a></li>
             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScuVUTgoHSTFyaJSBdNFZU52Mxc0Yiyoh7AfO_OLUXmB9x1SQ/viewform" target="_blank" rel="noopener" style="color: var(--accent);">Join Leviathan</a></li>
         </ul>
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -588,7 +629,7 @@
     <!-- HERO -->
     <div class="hero">
         <img src="images/logo_transparent.png" alt="Leviathan Robotics Logo" class="hero-logo">
-        <div class="hero-badge">FTC Team 25667 &mdash; Sandshrew Regionals</div>
+        <div class="hero-badge">FTC TEAM 25667</div>
         <h1>Leviathan<br>Robotics</h1>
         <p>Inspiring innovation, teamwork, and a passion for STEM through the challenges of robotics. Built with precision. Driven by purpose.</p>
         <div class="hero-robot">
@@ -624,12 +665,12 @@
     <section>
         <div class="section-inner">
             <div class="reveal">
-                <div class="section-label">Who We Are</div>
+                <div class="section-label">Home</div>
                 <div class="section-title">Spreading the Joy of Robotics</div>
                 <div class="section-subtitle" style="max-width: 800px;">Leviathan Robotics is a community-based robotics club founded by students at Saratoga High School, dedicated to innovation, teamwork, and engineering excellence.</div>
             </div>
 
-            <div class="card-grid reveal" style="margin-bottom: 3rem;">
+            <div class="card-grid card-grid-centered reveal" style="margin-bottom: 3rem; grid-template-columns: repeat(2, 1fr);">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-tag">Mission</div>
@@ -651,6 +692,13 @@
                         <p>Whether it's competing in local or national robotics competitions, hosting workshops, or participating in community outreach, we are dedicated to making robotics accessible and enjoyable for everyone. Through our work, we hope to spark curiosity, inspire the next generation of engineers, and contribute to a future where robotics plays a key role in shaping the world.</p>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-tag">Sustainability</div>
+                        <h3>SustainPrint&trade;</h3>
+                        <p>Sustainability is at the core of everything we build. Through our SustainPrint&trade; initiative, we reuse and repurpose materials across robot iterations, minimize waste during prototyping, and prioritize energy-efficient designs. We recycle electronic components and educate our community on sustainable practices in STEM — proving that innovation and environmental responsibility go hand in hand.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="reveal">
@@ -668,7 +716,7 @@
                     <div class="stat-label">Sponsors</div>
                 </div>
                 <div class="stat reveal-delay-3">
-                    <div class="stat-number">45k+</div>
+                    <div class="stat-number">45,000+</div>
                     <div class="stat-label">People Reached</div>
                 </div>
                 <div class="stat reveal-delay-4">
@@ -687,22 +735,29 @@
     <footer>
         <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
         <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
-        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-secondary);">
-            <p>Website designed by Aaryan Shah</p>
-            <p style="margin-top: 0.4rem;">leviathanrobotics24@gmail.com &bull; <a href="https://instagram.com/leviathanrobotics25667" target="_blank" style="color: var(--accent); text-decoration: none;">@leviathanrobotics25667</a></p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
         </div>
     </footer>
 </div>
 
-<!-- ==================== HARDWARE PAGE ==================== -->
-<div class="page" id="page-hardware">
+<!-- ==================== OUR ROBOT PAGE ==================== -->
+<div class="page" id="page-robot">
     <section>
         <div class="section-inner">
 
+            <div class="reveal">
+                <div class="section-label">Our Robot</div>
+                <div class="section-title">Engineering Excellence</div>
+                <div class="section-subtitle">Hardware, software, and autonomous systems — built with precision across every season.</div>
+            </div>
+
             <!-- Design Process -->
             <div class="reveal">
-                <div class="section-label">Engineering</div>
-                <div class="section-title">Design Process</div>
+                <div class="section-label">Our Robot</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Design Process</div>
                 <div class="section-subtitle">A rigorous, iterative approach from concept to competition-ready robot.</div>
             </div>
 
@@ -734,166 +789,294 @@
                 </div>
             </div>
 
-            <!-- Drivetrain -->
-            <div class="subsystem reveal" style="margin-top: 4rem;">
-                <div>
-                    <div class="card-tag">Drivetrain</div>
-                    <h3>Vertical Drivetrain</h3>
-                    <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
-                    <ul>
-                        <li>Bevel-gear and vertical-motor design for seamless spindexer integration</li>
-                        <li>Two odometry pods at center for optimal localization</li>
-                        <li>Compact form factor with base-level spindexer</li>
-                    </ul>
-                    <div class="ps-block">
-                        <div class="ps-item problem">
-                            <div class="ps-label">Tradeoff</div>
-                            <p>Vertical motors make turret integration more difficult</p>
-                        </div>
-                        <div class="ps-item solution">
-                            <div class="ps-label">Solution</div>
-                            <p>Developed innovative inverted turret layout to recover critical space</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="subsystem-img">
-                    <img src="images/page9_img3.jpg" alt="Drivetrain CAD">
-                </div>
+            <!-- Hardware / Software Sub-Tabs -->
+            <div class="season-tabs reveal" style="margin-top: 3rem;">
+                <button class="season-tab active" data-season="hardware">Hardware</button>
+                <button class="season-tab" data-season="software">Software</button>
             </div>
 
-            <!-- Spindexer -->
-            <div class="subsystem reveal">
-                <div class="subsystem-img">
-                    <img src="images/spindexer.png" alt="Spindexer detail">
-                </div>
-                <div>
-                    <div class="card-tag">Sorting</div>
-                    <h3>Spindexer</h3>
-                    <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
-                    <ul>
-                        <li>Solid, smooth interior walls to reduce snag points</li>
-                        <li>Enlarged spinner with extended arms for maximum grip</li>
-                        <li>Mounts both Control Hub and Expansion Hub along its side</li>
-                    </ul>
-                    <div class="ps-block">
-                        <div class="ps-item problem">
-                            <div class="ps-label">Problem</div>
-                            <p>Artifacts got stuck on standoffs; spinner had minimal contact</p>
-                        </div>
-                        <div class="ps-item solution">
-                            <div class="ps-label">Solution</div>
-                            <p>Replaced standoffs with solid walls; enlarged spinner diameter</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- ========== HARDWARE ========== -->
+            <div class="season-content active" id="season-hardware">
 
-            <!-- Turret -->
-            <div class="subsystem reveal">
-                <div>
-                    <div class="card-tag">Aiming</div>
-                    <h3>Turret</h3>
-                    <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
-                    <ul>
-                        <li>Metal ball bearings for 4x faster rotation vs. 3D-printed version</li>
-                        <li>Modularized from flywheel for faster iteration cycles</li>
-                        <li>Innovative attachment points for stability and fast prototyping</li>
-                    </ul>
-                    <div class="ps-block">
-                        <div class="ps-item problem">
-                            <div class="ps-label">Problem</div>
-                            <p>3D-printed turret was slow &mdash; couldn't use ball bearings</p>
-                        </div>
-                        <div class="ps-item solution">
-                            <div class="ps-label">Solution</div>
-                            <p>Replaced with manufactured turntable bearing turret &mdash; 4x faster</p>
+                <div class="reveal" style="margin-top: 2rem;">
+                    <div class="section-label">Our Robot</div>
+                    <div class="section-title" style="font-size: clamp(1.8rem, 4vw, 2.5rem);">Hardware</div>
+                </div>
+
+                <!-- Drivetrain -->
+                <div class="subsystem reveal" style="margin-top: 2rem;">
+                    <div>
+                        <div class="card-tag">Drivetrain</div>
+                        <h3>Vertical Drivetrain</h3>
+                        <p>By choosing a vertical drivetrain, we made the robot compact enough to fit a spindexer inside the drivetrain while staying within the 16" x 16" endgame square and 18" height limit.</p>
+                        <ul>
+                            <li>Bevel-gear and vertical-motor design for seamless spindexer integration</li>
+                            <li>Two odometry pods at center for optimal localization</li>
+                            <li>Compact form factor with base-level spindexer</li>
+                        </ul>
+                        <div class="ps-block">
+                            <div class="ps-item problem">
+                                <div class="ps-label">Tradeoff</div>
+                                <p>Vertical motors make turret integration more difficult</p>
+                            </div>
+                            <div class="ps-item solution">
+                                <div class="ps-label">Solution</div>
+                                <p>Developed innovative inverted turret layout to recover critical space</p>
+                            </div>
                         </div>
                     </div>
+                    <div class="subsystem-img">
+                        <img src="images/page9_img3.jpg" alt="Drivetrain CAD">
+                    </div>
                 </div>
-                <div class="subsystem-img">
-                    <img src="images/page11_img3.jpg" alt="Turret design">
-                </div>
-            </div>
 
-            <!-- Flywheel -->
-            <div class="subsystem reveal">
-                <div class="subsystem-img">
-                    <img src="images/page12_img2.jpg" alt="Flywheel system">
-                </div>
-                <div>
-                    <div class="card-tag">Shooting</div>
-                    <h3>Flywheel</h3>
-                    <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
-                    <ul>
-                        <li>Calculates distance to goal using camera angle data</li>
-                        <li>Regression model maps speed to shooting distance</li>
-                        <li>Tungsten putty increases inertia for longer shots</li>
-                        <li>Compatible with Limelight 3a and turret system</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Intake -->
-            <div class="subsystem reveal">
-                <div>
-                    <div class="card-tag">Collection</div>
-                    <h3>Intake</h3>
-                    <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
-                    <ul>
-                        <li>Rubber band wheels provide consistent grip and pull on artifacts</li>
-                        <li>Enlarged funnel ramp design to absorb high-speed impacts</li>
-                        <li>Sandpaper-enhanced surfaces for additional traction</li>
-                        <li>Protective funnel guards against wall and robot collisions</li>
-                    </ul>
-                    <div class="ps-block">
-                        <div class="ps-item problem">
-                            <div class="ps-label">Lesson Learned</div>
-                            <p>Control Hub mounted at 45&deg; inside spindexer caused IMU misalignment, breaking Road Runner odometry</p>
-                        </div>
-                        <div class="ps-item solution">
-                            <div class="ps-label">Fix</div>
-                            <p>Relocated Control Hub to vertical mount on top of spindexer, restoring proper odometry</p>
+                <!-- Spindexer -->
+                <div class="subsystem reveal">
+                    <div class="subsystem-img">
+                        <img src="images/spindexer.png" alt="Spindexer detail">
+                    </div>
+                    <div>
+                        <div class="card-tag">Sorting</div>
+                        <h3>Spindexer</h3>
+                        <p>Receives up to three artifacts from the intake, sorts them according to the required game pattern, and smoothly transfers them to the flywheel using an omni wheel.</p>
+                        <ul>
+                            <li>Solid, smooth interior walls to reduce snag points</li>
+                            <li>Enlarged spinner with extended arms for maximum grip</li>
+                            <li>Mounts both Control Hub and Expansion Hub along its side</li>
+                        </ul>
+                        <div class="ps-block">
+                            <div class="ps-item problem">
+                                <div class="ps-label">Problem</div>
+                                <p>Artifacts got stuck on standoffs; spinner had minimal contact</p>
+                            </div>
+                            <div class="ps-item solution">
+                                <div class="ps-label">Solution</div>
+                                <p>Replaced standoffs with solid walls; enlarged spinner diameter</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="subsystem-img">
-                    <img src="images/page13_img5.jpg" alt="Intake system with rubber band wheels">
-                </div>
-            </div>
 
-            <!-- Sensors -->
-            <div class="reveal" style="margin-top: 2rem;">
-                <div class="section-label">Sensors</div>
-                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Suite</div>
-            </div>
-            <div class="card-grid reveal" style="margin-top: 1.5rem;">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Vision</div>
-                        <h3>Limelight 3A</h3>
-                        <p>Precise aiming via real-time AprilTag detection. Provides autonomous localization and dynamic flywheel speed adjustment using trigonometric distance calculations.</p>
+                <!-- Turret -->
+                <div class="subsystem reveal">
+                    <div>
+                        <div class="card-tag">Aiming</div>
+                        <h3>Turret</h3>
+                        <p>Enables high-speed rotation through a belt drive, maintains flush alignment with the flywheel, and provides precise motor-controlled operation.</p>
+                        <ul>
+                            <li>Metal ball bearings for 4x faster rotation vs. 3D-printed version</li>
+                            <li>Modularized from flywheel for faster iteration cycles</li>
+                            <li>Innovative attachment points for stability and fast prototyping</li>
+                        </ul>
+                        <div class="ps-block">
+                            <div class="ps-item problem">
+                                <div class="ps-label">Problem</div>
+                                <p>3D-printed turret was slow &mdash; couldn't use ball bearings</p>
+                            </div>
+                            <div class="ps-item solution">
+                                <div class="ps-label">Solution</div>
+                                <p>Replaced with manufactured turntable bearing turret &mdash; 4x faster</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsystem-img">
+                        <img src="images/page11_img3.jpg" alt="Turret design">
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Detection</div>
-                        <h3>Color Sensor V3</h3>
-                        <p>Detects incoming ball presence and color for automatic sorting during autonomous. Position carefully tuned for consistent detection accuracy.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Tracking</div>
-                        <h3>2M Distance Sensor</h3>
-                        <p>Detects when a ball leaves the system and updates the ball count. Repositioned upward for longer sampling window to prevent missed detections.</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Robot Progression -->
+                <!-- Flywheel -->
+                <div class="subsystem reveal">
+                    <div class="subsystem-img">
+                        <img src="images/page12_img2.jpg" alt="Flywheel system">
+                    </div>
+                    <div>
+                        <div class="card-tag">Shooting</div>
+                        <h3>Flywheel</h3>
+                        <p>Receives artifacts from the spindexer and shoots them toward the goal. Uses Limelight camera to detect AprilTags for precise targeting.</p>
+                        <ul>
+                            <li>Calculates distance to goal using camera angle data</li>
+                            <li>Regression model maps speed to shooting distance</li>
+                            <li>Tungsten putty increases inertia for longer shots</li>
+                            <li>Compatible with Limelight 3a and turret system</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Intake -->
+                <div class="subsystem reveal">
+                    <div>
+                        <div class="card-tag">Collection</div>
+                        <h3>Intake</h3>
+                        <p>Efficiently intakes artifacts using rubber band roller wheels and a funnel ramp, smoothly channeling them into the spindexer for sorting.</p>
+                        <ul>
+                            <li>Rubber band wheels provide consistent grip and pull on artifacts</li>
+                            <li>Enlarged funnel ramp design to absorb high-speed impacts</li>
+                            <li>Sandpaper-enhanced surfaces for additional traction</li>
+                            <li>Protective funnel guards against wall and robot collisions</li>
+                        </ul>
+                        <div class="ps-block">
+                            <div class="ps-item problem">
+                                <div class="ps-label">Lesson Learned</div>
+                                <p>Control Hub mounted at 45&deg; inside spindexer caused IMU misalignment, breaking Road Runner odometry</p>
+                            </div>
+                            <div class="ps-item solution">
+                                <div class="ps-label">Fix</div>
+                                <p>Relocated Control Hub to vertical mount on top of spindexer, restoring proper odometry</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsystem-img">
+                        <img src="images/page13_img5.jpg" alt="Intake system with rubber band wheels">
+                    </div>
+                </div>
+
+                <!-- Sensors -->
+                <div class="reveal" style="margin-top: 2rem;">
+                    <div class="section-label">Our Robot</div>
+                    <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Suite</div>
+                </div>
+                <div class="card-grid reveal" style="margin-top: 1.5rem;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-tag">Vision</div>
+                            <h3>Limelight 3A</h3>
+                            <p>Precise aiming via real-time AprilTag detection. Provides autonomous localization and dynamic flywheel speed adjustment using trigonometric distance calculations.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-tag">Detection</div>
+                            <h3>Color Sensor V3</h3>
+                            <p>Detects incoming ball presence and color for automatic sorting during autonomous. Position carefully tuned for consistent detection accuracy.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-tag">Tracking</div>
+                            <h3>2M Distance Sensor</h3>
+                            <p>Detects when a ball leaves the system and updates the ball count. Repositioned upward for longer sampling window to prevent missed detections.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END HARDWARE -->
+
+            <!-- ========== SOFTWARE ========== -->
+            <div class="season-content" id="season-software">
+
+                <div class="reveal" style="margin-top: 2rem;">
+                    <div class="section-label">Our Robot</div>
+                    <div class="section-title" style="font-size: clamp(1.8rem, 4vw, 2.5rem);">Software</div>
+                    <div class="section-subtitle">Advanced autonomous navigation, computer vision, and precise motion control power our robot's performance.</div>
+                </div>
+
+                    <!-- Road Runner -->
+                    <div class="subsystem reveal">
+                        <div>
+                            <div class="card-tag">Navigation</div>
+                            <h3>Road Runner</h3>
+                            <p>Road Runner provides precise path planning, generating smooth trajectories during autonomous for predictable robot movement. Combined with sensor data for accurate localization.</p>
+                            <ul>
+                                <li>Enhanced localization with odometry integration</li>
+                                <li>Auto-correction and real-time path adjustment</li>
+                                <li>Robust recovery when bumped off course</li>
+                            </ul>
+                        </div>
+                        <div class="subsystem-img">
+                            <img src="images/page9_img3.jpg" alt="Vertical Drivetrain">
+                        </div>
+                    </div>
+
+                    <!-- MeepMeep -->
+                    <div class="subsystem reveal" style="margin-top: 3rem;">
+                        <div class="subsystem-img">
+                            <img src="images/meepmeep.png" alt="MeepMeep path visualization" style="max-width:70%;display:block;margin:auto;border-radius:20px;">
+                        </div>
+                        <div>
+                            <div class="card-tag">Path Simulation</div>
+                            <h3>MeepMeep</h3>
+                            <p>MeepMeep is a trajectory visualization tool that lets us simulate and debug Road Runner paths before deploying to the robot. By previewing autonomous routines on a virtual field, we iterate faster and catch pathing errors without needing physical test runs.</p>
+                            <ul>
+                                <li>Real-time 2D field simulation of autonomous trajectories</li>
+                                <li>Rapid iteration on path sequences without robot hardware</li>
+                                <li>Visual debugging of timing, heading, and trajectory conflicts</li>
+                                <li>Seamless integration with Road Runner's path-building API</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-grid reveal">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-tag">Challenge</div>
+                                <h3>Turning Inconsistencies</h3>
+                                <p>Selecting the wrong driving mode (Mecanum Drive vs Programming Board) caused unpredictable turning behavior. After extensive troubleshooting, we learned to correctly switch between modes for consistent performance.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-tag">Challenge</div>
+                                <h3>Complex Tuning Process</h3>
+                                <p>Over 10 hours adjusting nearly 40 variables with extreme values. Added teammates to reset the robot each cycle and used Desmos to visualize equations, significantly streamlining the process.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vision -->
+                    <div class="subsystem reveal" style="margin-top: 3rem;">
+                        <div class="subsystem-img">
+                            <img src="images/page12_img3.jpg" alt="Distance modeling graph">
+                        </div>
+                        <div>
+                            <div class="card-tag">Computer Vision</div>
+                            <h3>AprilTag Detection & Distance Modeling</h3>
+                            <p>The Limelight 3A provides real-time target alignment by detecting AprilTags on the goal. Our software calculates exact distance using camera angle data, then uses a regression model to determine optimal flywheel speed.</p>
+                            <ul>
+                                <li>Trigonometric distance calculation from camera angles</li>
+                                <li>Regression-based speed-to-distance mapping</li>
+                                <li>Vision-based failsafe for odometry drift correction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Sensor Fusion -->
+                    <div class="reveal" style="margin-top: 2rem;">
+                        <div class="section-label">Our Robot</div>
+                        <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Fusion</div>
+                        <div class="section-subtitle">Multiple sensor inputs combine for reliable autonomous performance.</div>
+                    </div>
+                    <div class="card-grid reveal">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-tag">Odometry</div>
+                                <h3>Dual Odometry Pods</h3>
+                                <p>Two pods at the robot's center provide optimal placement for accurate localization, working with Road Runner's path correction algorithms.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-tag">Color Sorting</div>
+                                <h3>Autonomous Ball Sorting</h3>
+                                <p>Color Sensor V3 detects incoming ball color and triggers automatic sorting logic during autonomous, allowing the spindexer to arrange artifacts in the required pattern.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-tag">Redundancy</div>
+                                <h3>Vision-Based Fallback</h3>
+                                <p>Limelight serves as a redundancy system, providing vision-based targeting as a failsafe to correct positional errors from odometry drift.</p>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+            <!-- END SOFTWARE -->
+
+            <!-- Robot Progression (outside subtabs) -->
             <div class="reveal" style="margin-top: 5rem;">
-                <div class="section-label">Evolution</div>
-                <div class="section-title">Robot Progression</div>
+                <div class="section-label">Our Robot</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Robot Progression</div>
             </div>
             <div class="timeline reveal">
                 <div class="timeline-item">
@@ -927,141 +1110,19 @@
     </footer>
 </div>
 
-<!-- ==================== SOFTWARE PAGE ==================== -->
-<div class="page" id="page-software">
-    <section>
-        <div class="section-inner">
-            <div class="reveal">
-                <div class="section-label">Software</div>
-                <div class="section-title">Intelligent Control Systems</div>
-                <div class="section-subtitle">Advanced autonomous navigation, computer vision, and precise motion control power our robot's performance.</div>
-            </div>
-
-            <!-- Road Runner -->
-            <div class="subsystem reveal">
-                <div>
-                    <div class="card-tag">Navigation</div>
-                    <h3>Road Runner</h3>
-                    <p>Road Runner provides precise path planning, generating smooth trajectories during autonomous for predictable robot movement. Combined with sensor data for accurate localization.</p>
-                    <ul>
-                        <li>Enhanced localization with odometry integration</li>
-                        <li>Auto-correction and real-time path adjustment</li>
-                        <li>Robust recovery when bumped off course</li>
-                    </ul>
-                </div>
-                <div class="subsystem-img">
-                    <img src="images/page9_img3.jpg" alt="Vertical Drivetrain">
-                </div>
-            </div>
-
-            <!-- MeepMeep -->
-            <div class="subsystem reveal" style="margin-top: 3rem;">
-                <div class="subsystem-img">
-                    <img src="images/meepmeep.png" alt="MeepMeep path visualization" style="max-width:70%;display:block;margin:auto;border-radius:20px;">
-                </div>
-                <div>
-                    <div class="card-tag">Path Simulation</div>
-                    <h3>MeepMeep</h3>
-                    <p>MeepMeep is a trajectory visualization tool that lets us simulate and debug Road Runner paths before deploying to the robot. By previewing autonomous routines on a virtual field, we iterate faster and catch pathing errors without needing physical test runs.</p>
-                    <ul>
-                        <li>Real-time 2D field simulation of autonomous trajectories</li>
-                        <li>Rapid iteration on path sequences without robot hardware</li>
-                        <li>Visual debugging of timing, heading, and trajectory conflicts</li>
-                        <li>Seamless integration with Road Runner's path-building API</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card-grid reveal">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Challenge</div>
-                        <h3>Turning Inconsistencies</h3>
-                        <p>Selecting the wrong driving mode (Mecanum Drive vs Programming Board) caused unpredictable turning behavior. After extensive troubleshooting, we learned to correctly switch between modes for consistent performance.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Challenge</div>
-                        <h3>Complex Tuning Process</h3>
-                        <p>Over 10 hours adjusting nearly 40 variables with extreme values. Added teammates to reset the robot each cycle and used Desmos to visualize equations, significantly streamlining the process.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vision / Limelight software side -->
-            <div class="subsystem reveal" style="margin-top: 3rem;">
-                <div class="subsystem-img">
-                    <img src="images/page12_img3.jpg" alt="Distance modeling graph">
-                </div>
-                <div>
-                    <div class="card-tag">Computer Vision</div>
-                    <h3>AprilTag Detection & Distance Modeling</h3>
-                    <p>The Limelight 3A provides real-time target alignment by detecting AprilTags on the goal. Our software calculates exact distance using camera angle data, then uses a regression model to determine optimal flywheel speed.</p>
-                    <ul>
-                        <li>Trigonometric distance calculation from camera angles</li>
-                        <li>Regression-based speed-to-distance mapping</li>
-                        <li>Vision-based failsafe for odometry drift correction</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Autonomous sensor fusion -->
-            <div class="reveal" style="margin-top: 2rem;">
-                <div class="section-label">Autonomy</div>
-                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Sensor Fusion</div>
-                <div class="section-subtitle">Multiple sensor inputs combine for reliable autonomous performance.</div>
-            </div>
-            <div class="card-grid reveal">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Odometry</div>
-                        <h3>Dual Odometry Pods</h3>
-                        <p>Two pods at the robot's center provide optimal placement for accurate localization, working with Road Runner's path correction algorithms.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Color Sorting</div>
-                        <h3>Autonomous Ball Sorting</h3>
-                        <p>Color Sensor V3 detects incoming ball color and triggers automatic sorting logic during autonomous, allowing the spindexer to arrange artifacts in the required pattern.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-tag">Redundancy</div>
-                        <h3>Vision-Based Fallback</h3>
-                        <p>Limelight serves as a redundancy system, providing vision-based targeting as a failsafe to correct positional errors from odometry drift.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
-        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
-        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
-            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
-            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
-        </div>
-    </footer>
-</div>
-
 <!-- ==================== OUTREACH PAGE ==================== -->
 <div class="page" id="page-outreach">
     <section>
         <div class="section-inner">
             <div class="reveal">
-                <div class="section-label">Community Impact</div>
+                <div class="section-label">Outreach</div>
                 <div class="section-title">Spreading FIRST</div>
                 <div class="section-subtitle">Connecting with communities locally and internationally to inspire the next generation of innovators.</div>
             </div>
 
             <div class="stats-bar reveal">
                 <div class="stat">
-                    <div class="stat-number">45k+</div>
+                    <div class="stat-number">45,000+</div>
                     <div class="stat-label">Total People Reached</div>
                 </div>
                 <div class="stat">
@@ -1113,10 +1174,10 @@
             </div>
 
             <!-- SustainPrint -->
-            <div class="subsystem reveal" style="margin-top: 3rem;">
+            <div class="subsystem reveal" style="margin-top: 3rem; cursor: pointer; transition: border-color 0.4s, box-shadow 0.4s;" onclick="showPage('sustainprint');" onmouseover="this.style.borderColor='rgba(56,189,248,0.4)'; this.style.boxShadow='0 8px 40px rgba(56,189,248,0.1)';" onmouseout="this.style.borderColor=''; this.style.boxShadow='';">
                 <div>
                     <div class="card-tag">Sustainability</div>
-                    <h3>SustainPrint Initiative</h3>
+                    <h3>SustainPrint&trade; Initiative</h3>
                     <p>We launched a filament recycling program to turn waste into possibility. Partnering with Stanford University's Department of Radiation Oncology and Maker Nexus, we built a bridge between cutting-edge research and the local STEM community.</p>
                     <ul>
                         <li>100+ hours reprocessing 6.5kg+ of filament waste</li>
@@ -1124,9 +1185,10 @@
                         <li>Several spools used to prototype our competition robot</li>
                         <li>Recycled 4 large boxes of waste from Maker Nexus makerspace</li>
                     </ul>
+                    <p style="margin-top: 1rem; color: var(--accent); font-weight: 600; font-size: 0.9rem;">Learn more &rarr;</p>
                 </div>
                 <div class="subsystem-img">
-                    <img src="images/page4_img8.jpg" alt="SustainPrint recycling bins">
+                    <img src="images/sustainprint/IMG_3982.jpg" alt="Recycled filament spools">
                 </div>
             </div>
 
@@ -1187,6 +1249,182 @@
                         <h3>FRC & FLL Partnerships</h3>
                         <p>Hosted events connecting FRC teams with FLL families, bringing together diverse FIRST community members to strengthen the robotics ecosystem in our region.</p>
                     </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== ACHIEVEMENTS PAGE ==================== -->
+<div class="page" id="page-achievements">
+    <section>
+        <div class="section-inner">
+            <div class="reveal" style="text-align:center;margin-bottom:3rem;">
+                <div class="section-label">Achievements</div>
+                <div class="section-title">Our Journey of Excellence</div>
+                <div class="section-subtitle" style="max-width:700px;margin:0 auto;">From our founding in 2024 to competing at the highest levels — a timeline of milestones that define Leviathan Robotics.</div>
+            </div>
+
+            <!-- Season Stats -->
+            <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-bottom:4rem;">
+                <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:var(--accent);">5</div>
+                    <div style="color:var(--text-secondary);margin-top:0.5rem;">Awards Won</div>
+                </div>
+                <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:var(--accent);">2×</div>
+                    <div style="color:var(--text-secondary);margin-top:0.5rem;">Alliance Captain</div>
+                </div>
+                <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:var(--accent);">6-0</div>
+                    <div style="color:var(--text-secondary);margin-top:0.5rem;">Best Qualifier Record</div>
+                </div>
+                <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:var(--accent);">5</div>
+                    <div style="color:var(--text-secondary);margin-top:0.5rem;">Countries Reached</div>
+                </div>
+            </div>
+
+            <!-- Competition Achievements -->
+            <div class="reveal" style="margin-bottom:3rem;">
+                <h2 style="font-size:1.6rem;margin-bottom:0.5rem;">Competition Awards</h2>
+                <p style="color:var(--text-secondary);margin-bottom:2rem;">Recognition earned through engineering excellence, teamwork, and gracious professionalism.</p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;margin-bottom:4rem;">
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#a78bfa);"></div>
+                    <div class="card-tag" style="margin-bottom:0.75rem;">NorCal Regionals 2026</div>
+                    <h3 style="font-size:1.25rem;margin-bottom:0.5rem;">Alliance Captain</h3>
+                    <p style="color:var(--text-secondary);font-size:0.95rem;">Selected as alliance captain at Northern California Regionals, partnering with the Infinite Loop for an incredible playoff run showcasing teamwork and strategy at the highest level.</p>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#a78bfa);"></div>
+                    <div class="card-tag" style="margin-bottom:0.75rem;">NorCal Regionals 2025</div>
+                    <h3 style="font-size:1.25rem;margin-bottom:0.5rem;">Judge's Choice Award</h3>
+                    <p style="color:var(--text-secondary);font-size:0.95rem;">Honored for exceptional creativity, teamwork, and engineering excellence. Advanced through qualifiers to the elimination rounds against the region's best teams.</p>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#a78bfa);"></div>
+                    <div class="card-tag" style="margin-bottom:0.75rem;">Santa Clara Qualifier</div>
+                    <h3 style="font-size:1.25rem;margin-bottom:0.5rem;">Inspire Award</h3>
+                    <p style="color:var(--text-secondary);font-size:0.95rem;">Received the prestigious Inspire Award — the highest award in FTC — recognizing excellence across all aspects of the competition. Secured entry to NorCal Regionals with a 4-1 record.</p>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#a78bfa);"></div>
+                    <div class="card-tag" style="margin-bottom:0.75rem;">Playspace 2 Qualifier</div>
+                    <h3 style="font-size:1.25rem;margin-bottom:0.5rem;">Winning Alliance Captain</h3>
+                    <p style="color:var(--text-secondary);font-size:0.95rem;">Dominated with an undefeated 6-0 qualifying record and a 3-1 playoff run. Earned the Winning Alliance Captain award and qualified for regionals.</p>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#a78bfa);"></div>
+                    <div class="card-tag" style="margin-bottom:0.75rem;">Playspace 1 Qualifier</div>
+                    <h3 style="font-size:1.25rem;margin-bottom:0.5rem;">Innovate Award</h3>
+                    <p style="color:var(--text-secondary);font-size:0.95rem;">Our inaugural qualifier — allied with Team 19819 AstroBruins to advance to the finals. Earned the Innovate Award for creative engineering solutions.</p>
+                </div>
+            </div>
+
+            <!-- Competition Timeline -->
+            <div class="reveal" style="margin-bottom:3rem;">
+                <h2 style="font-size:1.6rem;margin-bottom:0.5rem;">Competition Timeline</h2>
+                <p style="color:var(--text-secondary);margin-bottom:2rem;">Every match, every event — our complete competitive journey.</p>
+            </div>
+
+            <div class="timeline" style="margin-bottom:4rem;">
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">March 2026 &mdash; NorCal Regionals</div>
+                    <h4>Northern California Regional Championship</h4>
+                    <p>Selected as alliance captain. Partnered with the Infinite Loop for a powerful playoff run, executing complex strategies with precision in both autonomous and driver-controlled periods.</p>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">Early 2026 &mdash; Santa Clara Qualifier</div>
+                    <h4>Santa Clara High School Qualifier</h4>
+                    <p>Achieved a 4-1 qualifying record. Won the Inspire Award — the highest honor in FTC — securing our path to the NorCal Regional Championship.</p>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">February 2025 &mdash; Pre-Regionals Scrimmage</div>
+                    <h4>Hosted Practice Competition</h4>
+                    <p>Welcomed Cheesy Bytes, Kuriosity Robotics, and Quixilver for a pre-regionals scrimmage. Teams exchanged strategies and refined approaches before the big event.</p>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">December 2024 &mdash; Playspace 2 Qualifier</div>
+                    <h4>Playspace 2 FTC Competition</h4>
+                    <p>Undefeated 6-0 in qualifications, 3-1 in playoffs. Won the Winning Alliance Captain award and qualified for the regional championship.</p>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">November 2024 &mdash; Playspace 1 Qualifier</div>
+                    <h4>San Jose Robotics Tournament</h4>
+                    <p>Our inaugural qualifier at San Jose's Playspace. Allied with AstroBruins to reach the finals and won the Innovate Award for creative engineering.</p>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-date">June 2024 &mdash; Team Founded</div>
+                    <h4>Leviathan Robotics Established</h4>
+                    <p>FTC Team 25667 founded by students at Saratoga High School with a mission to innovate, compete, and inspire through robotics.</p>
+                </div>
+            </div>
+
+            <!-- Outreach Milestones -->
+            <div class="reveal" style="margin-bottom:3rem;">
+                <h2 style="font-size:1.6rem;margin-bottom:0.5rem;">Outreach Milestones</h2>
+                <p style="color:var(--text-secondary);margin-bottom:2rem;">Spreading the joy of STEM beyond the competition field.</p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-bottom:2rem;">
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">🌎</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">Global Robotics Outreach</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">International robotics education initiative spanning the Caribbean, Japan, Taiwan, China, and Turkey — distributing educational materials and encouraging FIRST participation worldwide.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">July 2024</div>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">🏫</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">Argonaut Elementary Science Fair</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Showcased our robot and programming demonstrations to over 200 community members, encouraging young students to pursue STEM and sharing FIRST values.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">April 2025</div>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">🏛️</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">San Jose Tech Museum</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Interactive exhibit at one of the region's top innovation hubs. Over 500 visitors engaged with our robot and learned about STEM through hands-on demonstrations.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">August 2025</div>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">🎓</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">CAD Classes with Stanford</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Launched CAD education program for children featuring introductory and advanced sessions, with a Stanford University professor teaching design efficiency concepts.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">November 2024</div>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">🤖</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">FLL Robotics Summer Camp</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Five-day hands-on camp at Argonaut Elementary teaching robotics fundamentals, Lego building, programming, and STEM activities to elementary school students.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">July 2024 &amp; 2026</div>
+                </div>
+
+                <div class="reveal" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.75rem;">📣</div>
+                    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">FIRST Programs Presentation</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Community presentation introducing FLL and FRC programs, featuring team members sharing experiences to inspire participation in STEM and robotics.</p>
+                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:0.75rem;">July 2024</div>
                 </div>
             </div>
 
@@ -1350,15 +1588,13 @@
 <div class="page" id="page-summercamp">
     <section>
         <div class="section-inner">
-            <div class="reveal" style="display:flex;align-items:center;gap:2rem;">
-                <div style="flex:1.5;min-width:0;">
+            <div class="reveal">
                     <div class="section-label">Summer Camp</div>
-                    <div class="section-title" style="white-space:nowrap;">FLL Robotics Summer Camp</div>
-                    <div class="section-subtitle" style="max-width:none;">A week-long program blending FIRST LEGO League robotics instruction with hands-on STEM activities. Mornings focus on FLL robotics, afternoons on exciting STEM experiments.</div>
-                </div>
-                <div style="flex:0.5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <a href="https://docs.google.com/forms/d/16cOJLAZ8sd-glcBXCikt05qjRCiszIbWvlxRTjuWQgw/edit" target="_blank" rel="noopener" style="display:inline-block;font-size:1.1rem;padding:0.8rem 2.5rem;background:var(--accent);color:#000;border-radius:8px;text-decoration:none;font-weight:600;">Register Now</a>
-                </div>
+                    <div class="section-title">FLL Robotics Summer Camp</div>
+                    <div class="section-subtitle" style="max-width:700px;">A week-long program blending FIRST LEGO League robotics instruction with hands-on STEM activities. Mornings focus on FLL robotics, afternoons on exciting STEM experiments.</div>
+                    <div style="text-align:center;">
+                        <a href="https://docs.google.com/forms/d/16cOJLAZ8sd-glcBXCikt05qjRCiszIbWvlxRTjuWQgw/edit" target="_blank" rel="noopener" class="register-btn">Register Now</a>
+                    </div>
             </div>
 
             <div class="stats-bar reveal">
@@ -1495,6 +1731,179 @@
                     <div class="testimonial-author">&mdash; Ariel Kuo</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong style="color: var(--text-primary);">Leviathan Robotics</strong> &mdash; FTC Team 25667</p>
+        <p style="margin-top: 0.5rem;">Inspiring innovation through STEM &bull; Gracious Professionalism</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p>Website designed by <strong style="color: var(--text-primary);">Aaryan Shah</strong></p>
+            <p style="margin-top: 0.4rem;">Email: <a href="mailto:leviathanrobotics24@gmail.com">leviathanrobotics24@gmail.com</a></p>
+            <p style="margin-top: 0.4rem;">Instagram: <a href="https://instagram.com/leviathanrobotics25667" target="_blank">@leviathanrobotics25667</a></p>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== SUSTAINPRINT PAGE ==================== -->
+<div class="page" id="page-sustainprint">
+    <section>
+        <div class="section-inner">
+            <div class="reveal">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title">Recycling Filament,<br>Reducing Waste</div>
+                <div class="section-subtitle" style="max-width: 800px;">Turning 3D printing waste into high-quality recycled filament — proving that sustainability and performance go hand in hand.</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-bar reveal">
+                <div class="stat">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Hours Invested</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">6.5kg</div>
+                    <div class="stat-label">Waste Reprocessed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Spools Produced</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Stanford Partnership</div>
+                </div>
+            </div>
+
+            <!-- The Problem -->
+            <div class="reveal" style="margin-top: 4rem;">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">The Problem</div>
+                <div class="section-subtitle">Each year, robotics teams use tons of 3D printing filament for prototyping, creating significant plastic waste. Our team saw this as an opportunity to make a difference.</div>
+            </div>
+
+            <div class="subsystem reveal" style="margin-top: 2rem;">
+                <div class="subsystem-img">
+                    <img src="images/sustainprint/IMG_3973.jpg" alt="Filament waste collected for recycling">
+                </div>
+                <div>
+                    <div class="card-tag">Waste Collection</div>
+                    <h3>Collecting Filament Waste</h3>
+                    <p>Robotics teams produce massive amounts of 3D printing waste through prototyping and iteration. Failed prints, support material, and outdated parts all end up in the trash. We collect this waste from local teams and sort it by material type — PLA and PETG — for proper recycling.</p>
+                    <ul>
+                        <li>Sorted by material type: PLA and PETG bins</li>
+                        <li>Collected from local robotics teams and makerspaces</li>
+                        <li>Bags of waste filament sorted and prepared for processing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Our Solution -->
+            <div class="reveal" style="margin-top: 4rem;">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Our Solution</div>
+                <div class="section-subtitle">Last summer, we launched SustainPrint&trade; to recycle used filament and turn waste into possibility.</div>
+            </div>
+
+            <div class="subsystem reveal" style="margin-top: 2rem;">
+                <div>
+                    <div class="card-tag">Recycling</div>
+                    <h3>The Filabot Extruder</h3>
+                    <p>Using a Filabot filament extruder, we shred, melt, and re-extrude waste plastic into brand new spools of usable filament. The process requires precise temperature control and careful monitoring to produce consistent, high-quality results.</p>
+                    <ul>
+                        <li>Filabot extruder for professional-grade filament recycling</li>
+                        <li>Precise temperature control at 185°C for optimal extrusion</li>
+                        <li>Spooling system for clean, organized filament output</li>
+                        <li>Over 6.5kg of waste reprocessed into 20+ spools</li>
+                    </ul>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/sustainprint/IMG_3978.jpg" alt="Filabot extruder in operation">
+                </div>
+            </div>
+
+            <div class="subsystem reveal" style="margin-top: 3rem;">
+                <div class="subsystem-img">
+                    <img src="images/sustainprint/IMG_9080.jpg" alt="Filabot temperature controller">
+                </div>
+                <div>
+                    <div class="card-tag">Process</div>
+                    <h3>Precision Extrusion</h3>
+                    <p>The extrusion process requires careful temperature management. Our team spent months experimenting and refining the process to achieve consistent filament diameter and quality, ensuring the recycled material performs as well as virgin filament.</p>
+                    <ul>
+                        <li>Temperature controlled to within 1°C for consistent output</li>
+                        <li>Multiple extrusion passes for improved quality</li>
+                        <li>Diameter monitoring for print compatibility</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Team Effort -->
+            <div class="reveal" style="margin-top: 4rem;">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Team Effort</div>
+            </div>
+
+            <div class="subsystem reveal" style="margin-top: 2rem;">
+                <div>
+                    <div class="card-tag">Collaboration</div>
+                    <h3>Stanford Partnership</h3>
+                    <p>Partnering with the Department of Radiation Oncology at Stanford University, we built a bridge between cutting-edge research and the local STEM community, combining science, creativity, and environmental responsibility.</p>
+                    <ul>
+                        <li>Partnership with Stanford's Department of Radiation Oncology</li>
+                        <li>Connecting academic research with community STEM initiatives</li>
+                        <li>Team members collaborating on recycling operations</li>
+                    </ul>
+                </div>
+                <div class="subsystem-img">
+                    <img src="images/sustainprint/IMG_8827.jpg" alt="Team working on filament recycling">
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="reveal" style="margin-top: 4rem;">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">The Results</div>
+                <div class="section-subtitle">Recycled filament used to prototype our own competition robot.</div>
+            </div>
+
+            <div class="subsystem reveal" style="margin-top: 2rem;">
+                <div class="subsystem-img">
+                    <img src="images/sustainprint/IMG_3982.jpg" alt="Recycled filament spools">
+                </div>
+                <div>
+                    <div class="card-tag">Output</div>
+                    <h3>Recycled Spools</h3>
+                    <p>Over the past few months, we've spent more than 100 hours experimenting, refining, and reprocessing filament waste — successfully reproducing over 20 spools of high-quality recycled material. Several of these spools were used to prototype our own competition robot, proving that sustainability and performance can go hand in hand.</p>
+                    <ul>
+                        <li>20+ spools of recycled PLA and PETG filament produced</li>
+                        <li>Used in our own robot prototyping and competition parts</li>
+                        <li>Quality comparable to commercially produced filament</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="reveal" style="margin-top: 4rem;">
+                <div class="section-label">SustainPrint&trade;</div>
+                <div class="section-title" style="font-size: clamp(1.5rem, 3vw, 2rem);">Gallery</div>
+            </div>
+
+            <div class="card-grid reveal" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <div class="card-img-wrapper"><img class="card-img" src="images/sustainprint/IMG_0420.jpg" alt="Sorted filament waste bags"></div>
+                    <div class="card-body"><h3>Sorted Waste Collection</h3><p>PLA and PETG waste sorted into labeled bins and bags, ready for recycling.</p></div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrapper"><img class="card-img" src="images/sustainprint/IMG_3974.jpg" alt="Raw filament waste"></div>
+                    <div class="card-body"><h3>Raw Material</h3><p>Collected 3D printing waste from robotics teams before processing.</p></div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrapper"><img class="card-img" src="images/sustainprint/IMG_8830.jpg" alt="Team processing filament"></div>
+                    <div class="card-body"><h3>Processing Station</h3><p>Team members operating the shredder and extruder setup.</p></div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -1839,6 +2248,25 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+    // Season tab switching
+    document.querySelectorAll('.season-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const season = tab.dataset.season;
+            document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.season-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            const content = document.getElementById('season-' + season);
+            if (content) {
+                content.classList.add('active');
+                content.querySelectorAll('.reveal').forEach(el => {
+                    el.classList.remove('visible');
+                    void el.offsetWidth;
+                    observer.observe(el);
+                });
+            }
+        });
+    });
+
     // Image Carousel
     let carouselIndex = 0;
     const track = document.getElementById('campCarouselTrack');
@@ -1914,6 +2342,7 @@
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeBlogModal();
     });
+
 </script>
 
 </body>
